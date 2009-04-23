@@ -1,0 +1,54 @@
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+AC_PREREQ(2.59)
+AC_INIT(Anahy, 1.7.4, seewald@anahy.org)
+AM_INIT_AUTOMAKE
+AC_CONFIG_SRCDIR([src/engine.c])
+AC_CONFIG_HEADER([include/config.h])
+
+# Checks for programs.
+AC_PROG_CC
+
+# Enables support for shared library building
+AC_PROG_LIBTOOL
+
+
+# Add SMP option
+AC_ARG_WITH(smp,
+	    [  --with-smp [    Compile for SMP architecture [default=autoprobe]]],
+	    smp_arch="y",
+	    if test -f /proc/cpuinfo; then
+	        processors=`grep processor /proc/cpuinfo | wc -l | awk {'print $1'}`
+		if test "$processors" -gt 1; then
+			smp_arch="y"
+		fi
+	    fi
+)
+
+if test "$smp_arch" = "y"; then
+	AC_DEFINE(CONFIG_SMP, 1, [Define to 1 if you want to compile for SMP architectures])
+fi
+
+dnl Argumentos
+AC_ARG_ENABLE(debug,
+	AS_HELP_STRING(--enable-debug,include debug information (default is no)),
+	if test $enableval = yes ; then
+		AC_DEFINE([DEBUG],[],"Mensagens de debug")
+		AC_DEFINE([CFLAGS],[-g gdb],"GDB Debugging")
+ 	fi
+)
+
+# Checks for libraries.
+AC_CHECK_LIB([pthread], [pthread_create])
+
+# Checks for header files.
+AC_HEADER_STDC
+AC_CHECK_HEADERS([pthread.h semaphore.h])
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+
+# Checks for library functions.
+AC_CHECK_FUNCS([memset])
+AC_OUTPUT([Makefile include/Makefile src/Makefile])

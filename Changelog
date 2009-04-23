@@ -1,0 +1,70 @@
+17th May 2006 (cordeiro)
+-------------------------
+	+ anahy-config (on package, but not installed)
+	+ mutexes.h fixed
+	+ anahy.hosts "removed" (only on package)
+	+ Release number: 1.7.3
+
+17th May 2006 (cordeiro)
+-------------------------
+	+ ...
+	+ Release number: 1.7.2.5
+
+07th April 2005 (lucasvr)
+-------------------------
+	+ Finished adapting to the new Active Messages API
+	+ Added the athread_attr_force_remote() function
+	+ Release number: 1.6.8
+	
+23th December 2004 (lucasvr)
+----------------------------
+	+ Not keeping the mutexes recursively locked no more
+	+ Release number: 1.6.7
+	
+13th December 2004 (lucasvr)
+----------------------------
+	+ Fixed "the" bug which was putting VPs to sleep eternally
+	+ Strategy used when joining a job in 'EXEC' status: help to
+	  execute
+	+ Release number: 1.6.6
+	
+29th November 2004 (lucasvr)
+----------------------------
+	+ Due to some problems on try_lock's, it was temporarily disabled.
+	+ Distributed release is working now.
+	+ Release number: 1.6.5
+
+23th October 2004 (lucasvr)
+---------------------------
+	+ Modifications on virtual processors: when a thread is executing
+	  and a VP tryies to join it, it helps on the execution of this 
+	  thread's subtree.
+	+ Checking for SMP support at compile time (by poking /proc/cpuinfo
+	  and adding an --with-smp option to autoconf). This information is
+	  used to select which locking scheme to use: pthread_mutex_lock on
+	  UP or pthread_mutex_trylock loops on SMP.
+	+ Added C++ support by including 'extern C' stuff inside headers.
+	+ Release number: 1.6.4
+
+30th September 2004 (lucasvr)
+-----------------------------
+	+ Added heuristics to limit the number of extra VPs creation
+	+ Release number: 1.6.3
+	
+28th September 2004 (lucasvr)
+-----------------------------
+	+ Internals modifications: changed function and variable names
+	  visible from users to athread_*
+	+ Minor cleanups
+	+ Wrote examples, stored in the 'examples' subdir
+	+ Release number: 1.6.2
+	
+28th September 2004 (lucasvr)
+-----------------------------
+	+ Added access to thread attributes with athread_attr_*()
+	+ Release number: 1.6.1
+	
+28th September 2004 (lucasvr)
+-----------------------------
+	+ Complete rewrote the code.
+	+ Released Anahy 1.6

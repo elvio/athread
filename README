@@ -1,0 +1,52 @@
+Anahy
+-----
+
+One of the  main problems found  when exploring parallel architectures on  high
+performance  computing  (HPC) is  the  lack of tools  adequated for programming
+applications. The desired attributes on these tools include efficient execution,
+comfortable utilization and portability.  Looking for filling  these attributes, 
+we present Anahy, an environment for parallel programming capable of performing
+task scheduling and load balance.
+
+This release targets SMP machines, by offering a M:N thread library. The use of
+Anahy is not different from a programmer's perspective than LinuxThreads. Anahy
+has just two steps in addition to LinuxThreads  programming, due to the need to
+initialize and finish the engine, responsible for managing virtual processors.
+
+A simple example of its use is shown below:
+
+--
+#include <athread.h>
+
+void *function(void *data_in)
+{
+	// perform the thread specific operations
+	athread_exit(NULL);
+}
+
+int main(int argc, char **argv)
+{
+	athread_t tid;
+
+	// initialize the Anahy engine
+	aInit(&argc, &argv);
+	
+	// create and join a thread
+	athread_create(&tid, NULL, function, NULL);
+	athread_join(tid, NULL);
+
+	// free resources used by the Anahy engine
+	aTerminate();
+
+	return 0;
+}
+
+So, Anahy keeps POSIX' PThreads interface. Further examples can be seen on
+the 'examples' subdirectory.
+
+Feel free to contact us for ideas, suggestions and bug reports. Emails can
+be found on the AUTHORS file.
+
+Thanks,
+The Anahy Team.
+

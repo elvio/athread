@@ -1,0 +1,31 @@
+*.o
+*.lo
+#	.gitignore
+#	AUTHORS
+#	COPYING
+#	Changelog
+#	Doxyfile
+Makefile
+#	Makefile.am
+#	Makefile.in
+#	README
+#	TODO
+#	aclocal.m4
+#	autogen.sh
+autom4te.cache/
+#	config.guess
+config.log
+#	config.status
+#	config.sub
+#	configure
+#	configure.in
+#	configure.scan
+#	depcomp
+#	examples/
+#	include/
+#	install-sh
+#	libtool
+#	ltmain.sh
+#	missing
+#	src/
+
