@@ -72,6 +72,18 @@ enum {
 typedef void *(*pfunc)(void *);
 
 
+struct remote_job {
+	int remote_weight;
+	int executing;
+	time_t started_at;
+	int data_type;
+	size_t data_size;
+	char *label;
+	int return_data_type;
+	size_t return_data_size;
+	pthread_mutex_t lock;
+};
+
 /* -- structures -- */
 
 /** Estrutura responsável pelos atributos de um job */
@@ -90,15 +102,16 @@ struct job_attributes {
 	int communication_cost;
 	long input_len;
 	long output_len;
-  //
-  int n_threads;
-  //
-  int splitfactor;
-  size_t inputsize;
-  size_t returnsize;
+	
+	/** Informacao para gerenciar threads remotas */
+	struct remote_job *remote_job;
+	
+ 	int n_threads;
+ 	int splitfactor;
+ 	size_t inputsize;
+  	size_t returnsize;
 	void *(* split)(void *, int, size_t, int);
 	void *(* merge)(void *, int, int, void *);
-	//
 };
 
 struct job_reply {	 
@@ -106,6 +119,8 @@ struct job_reply {
          int job_status;	 
          long output_len;	 
  };
+
+
 
 /** Estrutura que guarda propriedades específicas de um job */
 struct job {
@@ -134,6 +149,7 @@ struct job {
 	void *data;
 	   /** Ponteiro para os dados gerados por este job */
 	void *retval;
+
 };
 
 /** Estrutura de um VP */
@@ -178,7 +194,7 @@ struct user_func_parameters {
 struct engine engine;
 
 /* -- typedefs -- */
-typedef inline int (*cond_search)(struct job *, athread_t *, pthread_t *);
+//typedef inline int (*cond_search)(struct job *, athread_t *, pthread_t *);
 typedef struct job_attributes athread_attr_t;
 
 

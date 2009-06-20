@@ -22,6 +22,7 @@
  *
  */
 #include "anahy/structures.h"
+#include <pthread.h>
 
 /** Função que retorna um ponteiro para os atributos da tarefa corrente. 
 Retorna nulo caso estrutura inválida.*/
@@ -55,6 +56,7 @@ int athread_attr_init(athread_attr_t *attr)
 	attr->splitfactor = 0;
 	attr->split = NULL;
 	attr->merge = NULL;
+	attr->remote_job = NULL;
 	return 0;
 }
 
@@ -267,6 +269,18 @@ int athread_attr_set_inputsize(athread_attr_t *attr, size_t inputsize){
 int athread_attr_set_returnsize(athread_attr_t *attr, size_t returnsize){
 	attr->returnsize = returnsize;
 	return 0;
+}
+
+/** funcao para habilitar uma thread para executar remotamente **/
+int athread_attr_set_remote_ability(athread_attr_t *attr, int status) {
+	struct remote_job *new_remote_job;
+	if (status == 1) {
+		new_remote_job = malloc(sizeof(struct remote_job));
+		new_remote_job->remote_weight = 0;
+		new_remote_job->executing = 0;
+		pthread_mutex_init(&new_remote_job->lock, NULL);
+		attr->remote_job = new_remote_job; 
+	}
 }
 
 //

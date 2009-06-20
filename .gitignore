@@ -1,5 +1,8 @@
 *.o
 *.lo
+examples
+*.la
+*.libs
 #	.gitignore
 #	AUTHORS
 #	COPYING
