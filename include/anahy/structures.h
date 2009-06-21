@@ -32,6 +32,7 @@ extern "C" {
 #include <errno.h>
 #include <pthread.h>
 #include <sys/time.h>
+#include <mpi/mpi.h>
 
 #define __USE_XOPEN2K
 #include <semaphore.h>
@@ -234,8 +235,10 @@ int athread_attr_set_mergefunction(athread_attr_t *attr, void *(* merge)(void *,
 /* use by remote code */
 int athread_remote_size;
 int athread_remote_rank;
+
 MPI_Status athread_remote_status_send;
 MPI_Status athread_remote_status_receive;
+
 MPI_Request athread_remove_request_send;
 MPI_Request athread_remove_request_receive;
 
