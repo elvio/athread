@@ -47,9 +47,8 @@ void athread_remote_slave_status() {
 	printf(".\n");
 }
 
-int athread_remote_init(int *argc_param, char *argv[]) {
+int athread_remote_init(int argc, char *argv[]) {
 	int i;
-	int argc = *argc_param;
 	
 	printf("starting mpi_init using => {:argc => %d}\n", argc);
 		
