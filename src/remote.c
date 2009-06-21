@@ -47,11 +47,12 @@ void athread_remote_slave_status() {
 	printf(".\n");
 }
 
-int athread_remote_init(int argc, char *argv[]) {
+int athread_remote_init(int *argc_param, char *argv[]) {
 	int i;
+	int argc = *argc_param;
 	
 	#ifdef DEBUG
-		printf("remote_init called, here we go :|\n");
+		printf("starting mpi_init using => {:argc => %d}\n", argc);
 	#endif
 		
 	MPI_Init(&argc, &argv);
