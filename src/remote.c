@@ -51,9 +51,7 @@ int athread_remote_init(int *argc_param, char *argv[]) {
 	int i;
 	int argc = *argc_param;
 	
-	#ifdef DEBUG
-		printf("starting mpi_init using => {:argc => %d}\n", argc);
-	#endif
+	printf("starting mpi_init using => {:argc => %d}\n", argc);
 		
 	MPI_Init(&argc, &argv);
   MPI_Comm_rank(MPI_COMM_WORLD, &athread_remote_rank);  
