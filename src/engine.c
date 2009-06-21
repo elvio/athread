@@ -159,5 +159,8 @@ aInit(int *user_argc, char ***user_argv)
 	optopt = _optopt;
 	optarg = _optarg;
 	
+	// configure remote content
+	athread_remote_init(user_argc, user_argv);
+	
 	return 0;
 }

@@ -3,7 +3,7 @@
 
 #define MESSAGE_SIZE 3000
 
-enum master_status {WAITING_SLAVE, SLAVE_IS_DONE, DESCRIPTION_SENT, 
+enum master_status {FRESH, WAITING_SLAVE, SLAVE_IS_DONE, DESCRIPTION_SENT, 
 	SLAVE_WANT_DATA, DATA_SENT, SLAVE_COMPLETED_COMPUTATION, 
 	REQUESTED_TASK_DESCRIPTION, TASK_DESCRIPTION_RECEIVED, 
 	REQUESTED_TASK_DATA, TASK_DATA_RECEIVED};
@@ -28,9 +28,29 @@ void *__send_thread(void *in) {
 
 
 int athread_remote_init(int argc, char *argv[]) {
+	int i;
+	
+	#ifdef DEBUG
+		printf("remote_init called, here we go :|\n");
+	#endif
+		
 	MPI_Init(&argc, &argv);
   MPI_Comm_rank(MPI_COMM_WORLD, &athread_remote_rank);  
   MPI_Comm_size(MPI_COMM_WORLD, &athread_remote_size);
+
+	#ifdef DEBUG
+		printf("MPI configuration is done. I guess it was the hard part ;)\n");
+	#endif
+
+	// init status of slaves
+	slave_status = malloc(sizeof(int) * athread_remote_size);
+	for (i=0; i < athread_remote_size; i++){
+		slave_status[i] = FRESH;
+	}
+	
+	#ifdef DEBUG
+		printf("Slave status has been created with no sigfault. We are so lucky today...\n");
+	#endif
 }
 
 int athread_remote_terminate() {
