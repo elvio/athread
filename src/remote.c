@@ -31,17 +31,17 @@ void athread_remote_slave_status() {
 	for (i=0; i<athread_remote_rank; i++) {
 		printf("Status to slave #%d => ");
 		switch (slave_status[i]) {
-			FRESH: printf("FRESH"); break;
-			WAITING_SLAVE: printf("WAITING_SLAVE"); break;
-			SLAVE_IS_DONE: printf("SLAVE_IS_DONE"); break;
-			DESCRIPTION_SENT: printf("DESCRIPTION_SENT"); break;
-			SLAVE_WANT_DATA: printf("SLAVE_WANT_DATA"); break;
-			DATA_SENT: printf("DATA_SENT"); break;
-			SLAVE_COMPLETED_COMPUTATION: printf("SLAVE_COMPLETED_COMPUTATION"); break;
-			REQUESTED_TASK_DESCRIPTION: printf("REQUESTED_TASK_DESCRIPTION"); break;
-			TASK_DESCRIPTION_RECEIVED: printf("TASK_DESCRIPTION_RECEIVED"); break;
-			REQUESTED_TASK_DATA: printf("REQUESTED_TASK_DATA"); break;
-			TASK_DATA_RECEIVED: printf("TASK_DATA_RECEIVED"); break;
+			case FRESH: printf("FRESH"); break;
+			case WAITING_SLAVE: printf("WAITING_SLAVE"); break;
+			case SLAVE_IS_DONE: printf("SLAVE_IS_DONE"); break;
+			case DESCRIPTION_SENT: printf("DESCRIPTION_SENT"); break;
+			case SLAVE_WANT_DATA: printf("SLAVE_WANT_DATA"); break;
+			case DATA_SENT: printf("DATA_SENT"); break;
+			case SLAVE_COMPLETED_COMPUTATION: printf("SLAVE_COMPLETED_COMPUTATION"); break;
+			case REQUESTED_TASK_DESCRIPTION: printf("REQUESTED_TASK_DESCRIPTION"); break;
+			case TASK_DESCRIPTION_RECEIVED: printf("TASK_DESCRIPTION_RECEIVED"); break;
+			case REQUESTED_TASK_DATA: printf("REQUESTED_TASK_DATA"); break;
+			case TASK_DATA_RECEIVED: printf("TASK_DATA_RECEIVED"); break;
 		}
 	}
 	printf(".\n");
