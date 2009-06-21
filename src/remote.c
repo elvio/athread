@@ -28,7 +28,7 @@ void *__send_thread(void *in) {
 
 void athread_remote_slave_status() {
 	int i;
-	for (i=0; i<athread_remote_rank; i++) {
+	for (i=0; i<athread_remote_size; i++) {
 		printf("Status to slave #%d => ");
 		switch (slave_status[i]) {
 			case FRESH: printf("FRESH"); break;
