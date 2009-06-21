@@ -161,6 +161,7 @@ aInit(int *user_argc, char ***user_argv)
 	
 	// configure remote content
 	athread_remote_init(user_argc, user_argv);
+	athread_remote_slave_status();
 	
 	return 0;
 }

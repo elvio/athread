@@ -26,6 +26,26 @@ void *__recv_thread(void *in) {
 void *__send_thread(void *in) {
 }
 
+void athread_remote_slave_status() {
+	int i;
+	for (i=0; i<athread_remote_rank; i++) {
+		printf("Status to slave #%d => ");
+		switch (slave_status[i]) {
+			FRESH: printf("FRESH"); break;
+			WAITING_SLAVE: printf("WAITING_SLAVE"); break;
+			SLAVE_IS_DONE: printf("SLAVE_IS_DONE"); break;
+			DESCRIPTION_SENT: printf("DESCRIPTION_SENT"); break;
+			SLAVE_WANT_DATA: printf("SLAVE_WANT_DATA"); break;
+			DATA_SENT: printf("DATA_SENT"); break;
+			SLAVE_COMPLETED_COMPUTATION: printf("SLAVE_COMPLETED_COMPUTATION"); break;
+			REQUESTED_TASK_DESCRIPTION: printf("REQUESTED_TASK_DESCRIPTION"); break;
+			TASK_DESCRIPTION_RECEIVED: printf("TASK_DESCRIPTION_RECEIVED"); break;
+			REQUESTED_TASK_DATA: printf("REQUESTED_TASK_DATA"); break;
+			TASK_DATA_RECEIVED: printf("TASK_DATA_RECEIVED"); break;
+		}
+	}
+	printf(".\n");
+}
 
 int athread_remote_init(int argc, char *argv[]) {
 	int i;
