@@ -52,11 +52,11 @@ int athread_remote_init(int *argc, char ***argv) {
 	
 	printf("starting mpi_init using => {:argc => %d}\n", *argc);
 	
-	for (i=0; i < argc; i++) {
-		printf("ARGV[%d] = %s\n", argv[i])
+	for (i=0; i < *argc; i++) {
+		printf("ARGV[%d] = %s\n", i, argv[i])
 	}
 		
-	MPI_Init(&argc, &argv);
+	MPI_Init(&(*argc), &(*argv));
   MPI_Comm_rank(MPI_COMM_WORLD, &athread_remote_rank);  
   MPI_Comm_size(MPI_COMM_WORLD, &athread_remote_size);
 
