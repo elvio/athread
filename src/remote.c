@@ -53,7 +53,7 @@ int athread_remote_init(int *argc, char ***argv) {
 	printf("starting mpi_init using => {:argc => %d}\n", *argc);
 	
 	for (i=0; i < *argc; i++) {
-		printf("ARGV[%d] = %s\n", i, argv[i])
+		printf("ARGV[%d] = %s\n", i, *argv[i]);
 	}
 		
 	MPI_Init(&(*argc), &(*argv));
