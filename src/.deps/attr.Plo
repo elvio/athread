@@ -22,7 +22,10 @@ attr.lo attr.o: attr.c ../include/anahy/structures.h /usr/include/stdio.h \
   /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
   /usr/include/pthread.h /usr/include/sched.h /usr/include/signal.h \
   /usr/include/bits/initspin.h /usr/include/bits/sigthread.h \
-  /usr/include/sys/time.h /usr/include/semaphore.h \
+  /usr/include/sys/time.h /usr/include/mpi/mpi.h \
+  /usr/include/mpi/mpidefs.h /usr/include/mpi/mpi_fortdefs.h \
+  /usr/include/mpi/mpio.h /usr/include/mpi/mpi.h \
+  /usr/include/mpi/mpi_errno.h /usr/include/semaphore.h \
   ../include/anahy/list.h
 
 ../include/anahy/structures.h:
@@ -126,6 +129,18 @@ attr.lo attr.o: attr.c ../include/anahy/structures.h /usr/include/stdio.h \
 /usr/include/bits/sigthread.h:
 
 /usr/include/sys/time.h:
+
+/usr/include/mpi/mpi.h:
+
+/usr/include/mpi/mpidefs.h:
+
+/usr/include/mpi/mpi_fortdefs.h:
+
+/usr/include/mpi/mpio.h:
+
+/usr/include/mpi/mpi.h:
+
+/usr/include/mpi/mpi_errno.h:
 
 /usr/include/semaphore.h:
 

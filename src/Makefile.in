@@ -51,7 +51,7 @@ am__installdirs = "$(DESTDIR)$(libdir)"
 libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libathread_la_LIBADD =
-am_libathread_la_OBJECTS = attr.lo engine.lo jobs.lo vps.lo
+am_libathread_la_OBJECTS = attr.lo engine.lo jobs.lo vps.lo remote.lo
 libathread_la_OBJECTS = $(am_libathread_la_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)/include@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -179,7 +179,8 @@ lib_LTLIBRARIES = libathread.la
 libathread_la_SOURCES = attr.c \
 			engine.c \
 			jobs.c \
-			vps.c
+			vps.c \
+			remote.c
 
 AM_CPPFLAGS = -I$(top_srcdir)/include -Wall -ggdb
 all: all-am
@@ -254,6 +255,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/attr.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/engine.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jobs.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/remote.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vps.Plo@am__quote@
 
 .c.o:
