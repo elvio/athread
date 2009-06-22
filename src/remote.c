@@ -50,9 +50,6 @@ void athread_remote_slave_status() {
 int aRemoteInit(int argc, char **argv) {
 	int i;
 		
-  MPI_Comm_rank(MPI_COMM_WORLD, &athread_remote_rank);  
-  MPI_Comm_size(MPI_COMM_WORLD, &athread_remote_size);
-
 	#ifdef DEBUG
 		printf("MPI configuration is done. I guess it was the hard part ;)\n");
 	#endif
