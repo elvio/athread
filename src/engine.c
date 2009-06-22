@@ -119,7 +119,7 @@ aInit(int *user_argc, char ***user_argv)
 	init_engine();
 	
 	// configure remote content
-	athread_remote_init(*user_argc, *user_argv);
+	athread_remote_init(user_argc, user_argv);
 	athread_remote_slave_status();
 
 	while (2) {
