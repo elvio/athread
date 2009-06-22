@@ -47,16 +47,9 @@ void athread_remote_slave_status() {
 	printf(".\n");
 }
 
-int athread_remote_init(int *argc, char ***argv) {
+int aRemoteInit(int argc, char **argv) {
 	int i;
-	
-	printf("starting mpi_init using => {:argc => %d}\n", *argc);
-	
-	for (i=0; i < *argc; i++) {
-		printf("ARGV[%d] = %s\n", i, *(argv[i]));
-	}
 		
-	MPI_Init(&(*argc), &(*argv));
   MPI_Comm_rank(MPI_COMM_WORLD, &athread_remote_rank);  
   MPI_Comm_size(MPI_COMM_WORLD, &athread_remote_size);
 
@@ -75,6 +68,6 @@ int athread_remote_init(int *argc, char ***argv) {
 	#endif
 }
 
-int athread_remote_terminate() {
+int aRemoteTerminate() {
 	return 0;
 }

@@ -56,6 +56,8 @@ int main(int argc, char *argv[])
     vetor[i] = i+1;
   }
 
+	MPI_Init(&argc, &argv);
+	aRemoteInit(&argc, &argv);
   aInit(&argc, &argv);
   athread_attr_init(&attr);
   athread_attr_set_inputsize(&attr, VEC_SIZE * sizeof(int));

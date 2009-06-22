@@ -29,6 +29,8 @@ extern "C" {
 
 /* engine control */
 int aInit(int *argc, char ***argv);
+int aRemoteInit(int argc, char **argv);
+int aRemoteTerminate();
 int aTerminate();
 void aSearchFrom(int algorithm);
 
