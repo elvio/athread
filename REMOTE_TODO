@@ -1,0 +1,16 @@
+* Criar threads (passive e ativa): 
+  A thread passiva sera responsavel por receber "ordens", enquanto a ativa
+  vai submeter ordens.
+  
+  Na inicializacao as duas threads sao criadas. Quando o processo for master ele
+  vai enviar requisicao para todos os slaves, desta forma ficando todo mundo preparado. 
+  Caso o processo for slave, a thread passiva vai ficar aguradando o master.
+  
+  Master
+    Thread ativa = envia requisicao para slaves
+    Thread passiva = aguarda resposta de slaves
+    
+  Slaves
+    Thread ativa = envia resposta para master
+    Thread passiva = aguarda ordens do master
+    
