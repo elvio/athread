@@ -21,14 +21,6 @@ enum master_status {FRESH, WAITING_SLAVE, SLAVE_IS_DONE, DESCRIPTION_SENT,
 // hold status of each slave
 int *slave_status;
 
-void *__recv_thread(void *in) {
-	return NULL;
-}
-
-void *__send_thread(void *in) {
-	return NULL;
-}
-
 void athread_remote_slave_status() {
 	int i;
 	for (i=0; i<athread_remote_size; i++) {
@@ -51,9 +43,27 @@ void athread_remote_slave_status() {
 	printf("\n");
 }
 
+
+int should_i_act_as_master() {
+	return athread_remote_rank == 0;
+}
+
+
+int should_i_act_as_slave() {
+	return !should_i_act_as_master();
+}
+
+void *active_thread(void *in) {
+	
+}
+
+void *passive_thread(void *) {
+	
+}
+
 int aRemoteInit(int argc, char **argv) {
 	int i;
-
+	
 	#ifdef DEBUG
 		printf("MPI configuration is done. I guess it was the hard part ;)\n");
 	#endif
@@ -68,10 +78,17 @@ int aRemoteInit(int argc, char **argv) {
 		printf("Slave status has been created with no sigfault. We are so lucky today...\n");
 	#endif
 	
-	if (athread_remote_rank == 0) {
-		printf("Size: %d -- Rank: %d\n", athread_remote_size, athread_remote_rank);
-		athread_remote_slave_status();
-	}
+	#ifdef DEBUG
+		printf("Creating active thread...\n");
+	#endif
+	pthread_create(active_thread_th, NULL, active_thread, (void *)NULL);
+
+	#ifdef DEBUG
+		printf("Creating passive thread...\n");
+	#endif
+	pthread_create(passive_thread_th, NULL, passive_thread, (void *)NULL);
+	
+	
 	
 	return 0;
 }
