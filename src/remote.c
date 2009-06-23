@@ -21,15 +21,17 @@ enum master_status {FRESH, WAITING_SLAVE, SLAVE_IS_DONE, DESCRIPTION_SENT,
 int *slave_status;
 
 void *__recv_thread(void *in) {
+	return NULL;
 }
 
 void *__send_thread(void *in) {
+	return NULL;
 }
 
 void athread_remote_slave_status() {
 	int i;
 	for (i=0; i<athread_remote_size; i++) {
-		printf("Status to slave #%d => ");
+		printf("Status to slave #%d => ", i);
 		switch (slave_status[i]) {
 			case FRESH: printf("FRESH"); break;
 			case WAITING_SLAVE: printf("WAITING_SLAVE"); break;
@@ -43,8 +45,9 @@ void athread_remote_slave_status() {
 			case REQUESTED_TASK_DATA: printf("REQUESTED_TASK_DATA"); break;
 			case TASK_DATA_RECEIVED: printf("TASK_DATA_RECEIVED"); break;
 		}
+		printf("\n");
 	}
-	printf(".\n");
+	printf("\n");
 }
 
 int aRemoteInit(int argc, char **argv) {
@@ -63,6 +66,8 @@ int aRemoteInit(int argc, char **argv) {
 	for (i=0; i < athread_remote_size; i++){
 		slave_status[i] = FRESH;
 	}
+	
+	athread_remote_slave_status();
 	
 	#ifdef DEBUG
 		printf("Slave status has been created with no sigfault. We are so lucky today...\n");
