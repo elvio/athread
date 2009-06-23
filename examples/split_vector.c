@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
 	MPI_Comm_rank(MPI_COMM_WORLD, &athread_remote_rank);  
   MPI_Comm_size(MPI_COMM_WORLD, &athread_remote_size);
 	
-	aRemoteInit(&argc, &argv);
+	aRemoteInit(argc, argv);
 	aInit(&argc, &argv);
   
 	athread_attr_init(&attr);
