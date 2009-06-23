@@ -26,6 +26,7 @@ int *slave_status;
 
 void athread_remote_slave_status() {
 	int i;
+	
 	for (i=0; i<athread_remote_size; i++) {
 		printf("Status to slave #%d => ", i);
 		switch (slave_status[i]) {
@@ -58,13 +59,15 @@ int should_i_act_as_slave() {
 
 void *active_thread(void *in) {
 	int i;
+	int int_buf;
 	MPI_Request request;
 
 	// requesting slave attention
 	if (should_i_act_as_master()) {
 		for (i=1; i < athread_remote_size; i++) {
 			printf("Sending R_OP_READY to #%d\n", i);
-			MPI_Isend(R_OP_READY, 1, MPI_INT, i, 0, MPI_COMM_WORLD, &request);
+			int_buf = R_OP_READY;
+			MPI_Isend(&int_buf, 1, MPI_INT, i, 0, MPI_COMM_WORLD, &request);
 		}
 	}
 
