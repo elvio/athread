@@ -100,6 +100,8 @@ int aRemoteInit(int argc, char **argv) {
 	#endif
 	pthread_create(&passive_thread_th, NULL, passive_thread, (void *)NULL);
 	
+	pthread_join(active_thread_th, (void *) NULL);
+	pthread_join(passive_thread_th, (void *) NULL);
 	
 	
 	return 0;
