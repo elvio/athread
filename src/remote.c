@@ -69,7 +69,7 @@ void *active_thread(void *in) {
 
 }
 
-void *passive_thread(void *) {
+void *passive_thread(void *in) {
 	
 }
 
