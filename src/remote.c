@@ -10,6 +10,7 @@ enum master_status {FRESH, WAITING_SLAVE, SLAVE_IS_DONE, DESCRIPTION_SENT,
 	REQUESTED_TASK_DATA, TASK_DATA_RECEIVED};
 	
 enum operations {R_OP_READY};
+enum answers {R_A_READY};
 	
 	
 
@@ -60,21 +61,30 @@ int should_i_act_as_slave() {
 void *active_thread(void *in) {
 	int i;
 	int int_buf;
+	int op_rec;
 	MPI_Request request;
 
-	// requesting slave attention
-	if (should_i_act_as_master()) {
-		for (i=1; i < athread_remote_size; i++) {
-			printf("Sending R_OP_READY to #%d\n", i);
-			int_buf = R_OP_READY;
-			MPI_Isend(&int_buf, 1, MPI_INT, i, 0, MPI_COMM_WORLD, &request);
-		}
+	
+	if (should_i_act_as_slave()) {
+		printf("Sending R_A_READY to master from %d\n", athread_remote_rank);
+		int_buf = R_A_READY;
+		MPI_send(&int_buf, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 	}
-
 }
 
 void *passive_thread(void *in) {
+	int i;
+	int int_buf;
+	int op_rec;
+	MPI_Status status;
 	
+	if (should_i_act_as_master()) {
+		printf("Waiting all slaves get ready...\n");
+		for (i=1; i < athread_remote_size; i++) {
+			printf("Waiting #%d get ready...\n", i);
+			MPI_Recv(&op_rec, 1, MPI_INT, i, 0, MPI_COMM_WORLD, &status);
+		}
+	}
 }
 
 int aRemoteInit(int argc, char **argv) {
