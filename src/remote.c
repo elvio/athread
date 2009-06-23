@@ -55,7 +55,7 @@ int should_i_act_as_master() {
 
 
 int should_i_act_as_slave() {
-	return !should_i_act_as_master();
+	return athread_remote_rank != 0;
 }
 
 void *active_thread(void *in) {
@@ -68,7 +68,7 @@ void *active_thread(void *in) {
 	if (should_i_act_as_slave()) {
 		printf("Sending R_A_READY to master from %d\n", athread_remote_rank);
 		int_buf = R_A_READY;
-		MPI_send(&int_buf, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
+		MPI_Send(&int_buf, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 	}
 }
 
