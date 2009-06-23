@@ -68,6 +68,8 @@ int aRemoteInit(int argc, char **argv) {
 		printf("Slave status has been created with no sigfault. We are so lucky today...\n");
 	#endif
 	
+	athread_remote_slave_status();
+	
 	return 0;
 }
 
