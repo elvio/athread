@@ -58,12 +58,13 @@ int should_i_act_as_slave() {
 
 void *active_thread(void *in) {
 	int i;
+	MPI_Request request;
 
 	// requesting slave attention
 	if (should_i_act_as_master()) {
 		for (i=1; i < athread_remote_size; i++) {
 			printf("Sending R_OP_READY to #%d\n", i);
-			MPI_Isend(R_OP_READY, 1, MPI_INT, i, 0, MPI_COMM_WORLD, NULL);
+			MPI_Isend(R_OP_READY, 1, MPI_INT, i, 0, MPI_COMM_WORLD, &request);
 		}
 	}
 
