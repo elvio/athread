@@ -46,6 +46,8 @@ int main(int argc, char *argv[])
   int *vetor; 
   void *result;
   int i;
+	int rank;
+	int size;
   athread_t sth;
   athread_attr_t attr;
 
@@ -57,8 +59,10 @@ int main(int argc, char *argv[])
   }
 
 	MPI_Init(&argc, &argv);
-	MPI_Comm_rank(MPI_COMM_WORLD, &athread_remote_rank);  
-  MPI_Comm_size(MPI_COMM_WORLD, &athread_remote_size);
+	MPI_Comm_rank(MPI_COMM_WORLD, &rank);  
+  MPI_Comm_size(MPI_COMM_WORLD, &size);
+
+	printf("outside -- rank(%d) -- size(%d)\n", rank, size);
 	
 	aRemoteInit(argc, argv);
 	aInit(&argc, &argv);
