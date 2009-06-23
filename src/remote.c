@@ -8,6 +8,8 @@ enum master_status {FRESH, WAITING_SLAVE, SLAVE_IS_DONE, DESCRIPTION_SENT,
 	REQUESTED_TASK_DESCRIPTION, TASK_DESCRIPTION_RECEIVED, 
 	REQUESTED_TASK_DATA, TASK_DATA_RECEIVED};
 	
+enum operations {R_OP_READY};
+	
 	
 
 // int athread_remote_size;
@@ -54,7 +56,16 @@ int should_i_act_as_slave() {
 }
 
 void *active_thread(void *in) {
-	
+	int i;
+
+	// requesting slave attention
+	if (should_i_act_as_master()) {
+		for (i=1; i < athread_remote_size; i++) {
+			prtinf("Sending R_OP_READY to #%d\n", i);
+			MPI_Isend(R_OP_READY, 1, MPI_INT, i, 0, MPI_COMM_WORLD, NULL);
+		}
+	}
+
 }
 
 void *passive_thread(void *) {
