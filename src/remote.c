@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <mpi/mpi.h>
 #include "anahy/structures.h"
 
@@ -92,12 +93,12 @@ int aRemoteInit(int argc, char **argv) {
 	#ifdef DEBUG
 		printf("Creating active thread...\n");
 	#endif
-	pthread_create(active_thread_th, NULL, active_thread, (void *)NULL);
+	pthread_create(&active_thread_th, NULL, active_thread, (void *)NULL);
 
 	#ifdef DEBUG
 		printf("Creating passive thread...\n");
 	#endif
-	pthread_create(passive_thread_th, NULL, passive_thread, (void *)NULL);
+	pthread_create(&passive_thread_th, NULL, passive_thread, (void *)NULL);
 	
 	
 	
