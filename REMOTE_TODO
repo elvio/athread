@@ -13,4 +13,8 @@
   Slaves
     Thread ativa = envia resposta para master
     Thread passiva = aguarda ordens do master
-    
+
+
+* Usar variaveis condicionais. engine coloca valor em buffer compartilhado, ativa variavel
+condicional, remote pega lock e usa buffer, limpando buffer e alterando status do slave_status
+usado.
