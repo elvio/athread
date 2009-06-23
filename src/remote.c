@@ -8,6 +8,7 @@ enum master_status {FRESH, WAITING_SLAVE, SLAVE_IS_DONE, DESCRIPTION_SENT,
 	REQUESTED_TASK_DESCRIPTION, TASK_DESCRIPTION_RECEIVED, 
 	REQUESTED_TASK_DATA, TASK_DATA_RECEIVED};
 	
+	
 
 // int athread_remote_size;
 // int athread_remote_rank;
@@ -52,11 +53,7 @@ void athread_remote_slave_status() {
 
 int aRemoteInit(int argc, char **argv) {
 	int i;
-	
-	MPI_Init(&argc, &argv);
-	MPI_Comm_rank(MPI_COMM_WORLD, &athread_remote_rank);  
-  MPI_Comm_size(MPI_COMM_WORLD, &athread_remote_size);
-		
+
 	#ifdef DEBUG
 		printf("MPI configuration is done. I guess it was the hard part ;)\n");
 	#endif
@@ -66,8 +63,6 @@ int aRemoteInit(int argc, char **argv) {
 	for (i=0; i < athread_remote_size; i++){
 		slave_status[i] = FRESH;
 	}
-	
-	athread_remote_slave_status();
 	
 	#ifdef DEBUG
 		printf("Slave status has been created with no sigfault. We are so lucky today...\n");
