@@ -288,9 +288,6 @@ int athread_attr_set_returnsize(athread_attr_t *attr, size_t returnsize){
 // 	pthread_mutex_t lock;
 // };
 
-int athread_has_remote_ability(athread_attr_t *attr) {
-	return (attr != NULL && attr->remote_job != NULL);
-}
 
 /** funcao para habilitar uma thread para executar remotamente **/
 int athread_attr_set_remote_ability(athread_attr_t *attr, int status) {

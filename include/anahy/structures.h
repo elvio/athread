@@ -233,6 +233,8 @@ int athread_attr_set_mergefunction(athread_attr_t *attr, void *(* merge)(void *,
 
 
 /* use by remote code */
+int athread_attr_set_remote_ability(athread_attr_t *attr, int status);
+
 int athread_remote_size;
 int athread_remote_rank;
 pthread_t active_thread_th;
