@@ -67,12 +67,12 @@ int main(int argc, char *argv[]) {
 	
 	
 	// create local threads and let it runnn...
-	athread_create(local_thread1, NULL, local1, (void *) NULL);
-	athread_create(local_thread2, NULL, local2, (void *) NULL);
+	athread_create(&local_thread1, NULL, local1, (void *) NULL);
+	athread_create(&local_thread2, NULL, local2, (void *) NULL);
 
 	// create remote threads and let ir runn.. too..
-	athread_create(remote_thread1, NULL, remote1, (void *) NULL);
-	athread_create(remote_thread2, NULL, remote2, (void *) NULL);
+	athread_create(&remote_thread1, NULL, remote1, (void *) NULL);
+	athread_create(&remote_thread2, NULL, remote2, (void *) NULL);
 	
 	aTerminate();
 	return 0;
