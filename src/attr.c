@@ -271,6 +271,27 @@ int athread_attr_set_returnsize(athread_attr_t *attr, size_t returnsize){
 	return 0;
 }
 
+
+
+
+// remote content
+// ====================
+// struct remote_job {
+// 	int remote_weight;
+// 	int executing;
+// 	time_t started_at;
+// 	int data_type;
+// 	size_t data_size;
+// 	char *label;
+// 	int return_data_type;
+// 	size_t return_data_size;
+// 	pthread_mutex_t lock;
+// };
+
+int athread_has_remote_ability(athread_attr_t *attr) {
+	return (attr != NULL && attr->remote_job != NULL);
+}
+
 /** funcao para habilitar uma thread para executar remotamente **/
 int athread_attr_set_remote_ability(athread_attr_t *attr, int status) {
 	struct remote_job *new_remote_job;
@@ -282,5 +303,3 @@ int athread_attr_set_remote_ability(athread_attr_t *attr, int status) {
 		attr->remote_job = new_remote_job; 
 	}
 }
-
-//
