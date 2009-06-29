@@ -117,6 +117,11 @@ execute_job(struct job *job, struct vp_node *vp)
 {
 	void *job_data, *job_retval;
 	
+	if ( job_has_remote_ability(job) ) {
+		printf("We found a remote job. Return for now...\n");
+		return;
+	}
+	
 	Pthread_mutex_lock(job->job_list.mutex);
 	job->status = JOB_EXECUTING;
 	job_data = job->data;
