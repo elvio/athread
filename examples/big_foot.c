@@ -2,15 +2,19 @@
 #include <stdlib.h>
 #include "athread.h"
 
+#define MAX 100
+
 void *local1(void *input) {
-	while (1) {
+	int i;
+	for (i=0; i < MAX; i++) {
 		printf("Alohha from local 1...\n");
 		sleep(1);
 	}
 }
 
 void *local2(void *input) {
-	while (1) {
+	int i;
+	for (i=0; i < MAX; i++) {
 		printf("Alohha from local 2...\n");
 		sleep(1);
 	}
@@ -75,6 +79,13 @@ int main(int argc, char *argv[]) {
 	*input_value = 10;
 	athread_create(&remote_thread1, NULL, remote1, (void *) input_value);
 	athread_create(&remote_thread2, NULL, remote2, (void *) input_value);
+	
+	
+	athread_join(local_thread1, (void*)NULL);
+	athread_join(local_thread2, (void*)NULL);
+	
+	athread_join(remote_thread1, (void*)NULL);
+	athread_join(remote_thread2, (void*)NULL);
 	
 	aTerminate();
 	return 0;
