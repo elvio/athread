@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <mpi/mpi.h>
 #include "anahy/structures.h"
+#include "anahy/macros.h"
+#include "anahy/vps.h"
+#include "anahy/list.h"
+#include "anahy/mutexes.h"
 
 #define MESSAGE_SIZE 3000
 
@@ -123,4 +127,10 @@ int aRemoteInit(int argc, char **argv) {
 
 int aRemoteTerminate() {
 	return 0;
+}
+
+int athread_remote_send_job(struct job *job) {
+	Pthread_mutex_lock(job->job_list.mutex);
+	job->status = JOB_EXECUTING;
+	pthread_mutex_unlock(job->job_list.mutex);
 }
