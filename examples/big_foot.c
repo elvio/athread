@@ -64,6 +64,9 @@ void *remote2(void *input) {
 int main(int argc, char *argv[]) {
 	athread_t remote_thread1, remote_thread2;
 	athread_t local_thread1, local_thread2;
+	athread_attr_t remote1_attr;
+	athread_attr_t remote2_attr;
+	
 	int *input_value = malloc(sizeof(int));
 	
 	MPI_Init(&argc, &argv);
@@ -80,8 +83,14 @@ int main(int argc, char *argv[]) {
 
 	// create remote threads and let ir runn.. too..
 	*input_value = 10;
-	athread_create(&remote_thread1, NULL, remote1, (void *) input_value);
-	athread_create(&remote_thread2, NULL, remote2, (void *) input_value);
+	
+	athread_attr_init(&remote1_attr);
+	athread_attr_init(&remote2_attr);
+	athread_attr_set_remote_ability(&remote1_attr, 1);
+	athread_attr_set_remote_ability(&remote2_attr, 1);
+	
+	athread_create(&remote_thread1, &remote1_attr, remote1, (void *) input_value);
+	athread_create(&remote_thread2, &remote2_attr, remote2, (void *) input_value);
 	
 	
 	athread_join(local_thread1, (void*)NULL);
