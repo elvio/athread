@@ -54,12 +54,12 @@ void athread_remote_slave_status() {
 
 
 int should_i_act_as_master() {
-	return athread_remote_rank == 0;
+	return ((athread_remote_rank == 0) ? 1 : 0);
 }
 
 
 int should_i_act_as_slave() {
-	return athread_remote_rank != 0;
+	return ((athread_remote_rank != 0) ? 1 : 0);
 }
 
 void *active_thread(void *in) {
