@@ -545,7 +545,7 @@ athread_fetch(athread_t id, void **return_data)
 }
 
 int job_has_remote_ability(struct job *job) {
-	if (job && job.attribs && job.attribs.remote_job) {
+	if (job && job->attribs && job->attribs.remote_job) {
 		return 1;
 	}
 		
