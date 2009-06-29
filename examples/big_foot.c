@@ -31,6 +31,7 @@ void *remote1(void *input) {
 	max_i = *(int *) input;
 	max_j = max_i;
 	
+	printf("Starting remote 1 calc\n");
 	for (i=0; i < max_i; i++) {
 		for (j=0; j < max_j; j++) {
 			*total += 1;
@@ -45,6 +46,8 @@ void *remote2(void *input) {
 	
 	total = malloc(sizeof(int));
 	*total = 0;
+	
+	printf("Starting remote 2 calc\n");
 	
 	max_i = *(int *) input;
 	max_j = max_i;
