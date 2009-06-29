@@ -81,6 +81,12 @@ int main(int argc, char *argv[]) {
 	athread_create(&remote_thread2, NULL, remote2, (void *) input_value);
 	
 	
+	athread_join(local_thread1, (void*)NULL);
+	athread_join(local_thread2, (void*)NULL);
+	
+	athread_join(remote_thread1, (void*)NULL);
+	athread_join(remote_thread2, (void*)NULL);
+	
 	aTerminate();
 	return 0;
 }
