@@ -293,6 +293,7 @@ int athread_attr_set_returnsize(athread_attr_t *attr, size_t returnsize){
 int athread_attr_set_remote_ability(athread_attr_t *attr, int status) {
 	struct remote_job *new_remote_job;
 	if (status == 1) {
+		printf("setting remote ability to thread\n");
 		new_remote_job = malloc(sizeof(struct remote_job));
 		new_remote_job->remote_weight = 0;
 		new_remote_job->executing = 0;
