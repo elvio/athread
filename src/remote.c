@@ -1,10 +1,6 @@
 #include <stdio.h>
 #include <mpi/mpi.h>
 #include "anahy/structures.h"
-#include "anahy/macros.h"
-#include "anahy/vps.h"
-#include "anahy/list.h"
-#include "anahy/mutexes.h"
 
 #define MESSAGE_SIZE 3000
 
