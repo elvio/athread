@@ -18,6 +18,7 @@
  * License along with Anahy; if not, write to the Free Software Foundation, 
  * Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
  */
+#include "pthread.h"
 #ifndef _mutexes_h
 #define _mutexes_h 1
 
@@ -31,4 +32,4 @@ pthread_mutex_t steal_flag_mutex;
 }
 #endif
 
-#endif /* _mutexes_h */
+#endif
