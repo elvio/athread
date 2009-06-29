@@ -18,3 +18,14 @@
 * Usar variaveis condicionais. engine coloca valor em buffer compartilhado, ativa variavel
 condicional, remote pega lock e usa buffer, limpando buffer e alterando status do slave_status
 usado.
+
+
+
+Mensagens
+
+MASTER										SLAVE
+NEW_TASK									OK (status: WAITING_TASK_DESC)
+TASK_DESC									OK (status: WAITING_TASK_DATA)
+TASK_DATA									OK (status: EXECUTING)
+---
+continue executing
