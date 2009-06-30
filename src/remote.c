@@ -66,7 +66,6 @@ void *listener_thread(void *in) {
 			
 			// got a weired message buddy... i guess we have to ignore it. don't you?
 			if (handle_index <= 0 || handle_index > athread_remote_size) {
-				printf("Waiting new message...\n");
 				sleep(1);
 			} else {
 				printf("Got message from #%d\n", handle_index);
@@ -77,15 +76,13 @@ void *listener_thread(void *in) {
 	// wait message from master
 	if (remote_slave()) {
 		printf("starting as slave\n");
-		sleep(5);
-		printf("sending op\n");
-		athread_remote_send_operation_to_master(OKS);
-		
 		sleep(3);
 		printf("sending op\n");
 		athread_remote_send_operation_to_master(OKS);
 		
-		sleep(5);
+		printf("sending op\n");
+		athread_remote_send_operation_to_master(OKS);
+		
 		printf("sending op\n");
 		athread_remote_send_operation_to_master(OKS);
 		
