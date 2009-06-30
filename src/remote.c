@@ -69,7 +69,7 @@ void *listener_thread(void *in) {
 				sleep(1);
 			} else {
 				printf("Got message from #%d\n", handle_index);
-				MPI_Start(&request[handle_index]);
+				MPI_Start(&requests[handle_index]);
 			}
 		}
 	}
