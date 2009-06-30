@@ -52,10 +52,13 @@ void *listener_thread(void *in) {
 	int received_op[athread_remote_size];
 	int handle_index;
 	MPI_Status status;
-	MPI_Request requests[athread_remote_size];
+	MPI_Request *requests;
 	
-	// wait message form any slave
+	// wait message form any slaves
 	if (remote_master()) {
+		
+		requests = malloc(sizeof(MPI_Request) * athread_remote_size);
+		
 		printf("starting as master\n");
 		for (i = 1; i < athread_remote_size; ++i) {
 			MPI_Irecv(&received_op[i], 1, MPI_INT, i, 0, MPI_COMM_WORLD, &requests[i]);
@@ -66,6 +69,8 @@ void *listener_thread(void *in) {
 			// got a weired message buddy... i guess we have to ignore it. don't you?
 			if (handle_index <= 0 || handle_index > athread_remote_size) {
 				printf("waiting for any...\n");
+				free(requests);
+				requests = malloc(sizeof(MPI_Request) * athread_remote_size);
 				MPI_Waitany(athread_remote_size, requests, &handle_index, &status);
 				sleep(1);
 			} else {
