@@ -144,7 +144,8 @@ int athread_remote_send_job(struct job *job) {
 }
 
 int athread_remote_send_operation(int operation, int rank) {
-	MPI_Send(&operation, 1, MPI_INT, rank, 0, MPI_COMM_WORLD);	
+	MPI_Request request;
+	MPI_Isend(&operation, 1, MPI_INT, rank, 0, MPI_COMM_WORLD, &request);	
 	return 0;
 }
 
