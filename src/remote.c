@@ -65,9 +65,10 @@ void *listener_thread(void *in) {
 		while (1) {
 			// got a weired message buddy... i guess we have to ignore it. don't you?
 			if (handle_index <= 0 || handle_index > athread_remote_size) {
+				printf("waiting for any...\n");
 				sleep(1);
 			} else {
-				printf("waiting any again");
+				printf("waiting any again\n");
 				sleep(1);
 				MPI_Waitany(athread_remote_size, requests, &handle_index, &status);
 			}
@@ -118,7 +119,6 @@ int aRemoteInit(int argc, char **argv) {
 		printf("Creating listener thread...\n");
 	#endif
 	pthread_create(&listener_th, NULL, listener_thread, (void *)NULL);
-	
 	pthread_join(listener_th, (void *) NULL);
 	
 	
