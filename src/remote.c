@@ -6,7 +6,7 @@
 #define MESSAGE_SIZE 3000
 static pthread_mutex_t remote_mutex_slave = PTHREAD_MUTEX_INITIALIZER;
 
-enum shared_oper {FRESH, EXECUTING};	
+enum shared_oper {FRESH, EXECUTING, OKS};	
 enum master_oper {M_OP_NEW_TASK, M_OP_TASK_DESC, M_OP_TASK_DATA};
 enum slave_oper {S_OP_WTN_TASK_DESC, S_OP_WTN_TASK_DATA};
 	
@@ -56,6 +56,7 @@ void *listener_thread(void *in) {
 	
 	// wait message form any slave
 	if (remote_master()) {
+		printf("starting as master\n");
 		for (i = 1; i < athread_remote_size; ++i) {
 			MPI_Irecv(&received_op[i], 1, MPI_INT, i, 0, MPI_COMM_WORLD, &requests[i]);
 		}
@@ -69,6 +70,10 @@ void *listener_thread(void *in) {
 	
 	// wait message from master
 	if (remote_slave()) {
+		printf("starting as slave\n");
+		sleep(5);
+		printf("sending op\n");
+		athread_remote_send_operation_to_master(OKS);
 	}
 }
 
@@ -119,16 +124,19 @@ int athread_remote_send_job(struct job *job) {
 	slave = get_available_slave();
 	if (slave == -1) {
 		printf("Could not find a available slave to execute remote thread\n");
-		return 0;
+		return 1;
 	}
+	return 0;
 }
 
 int athread_remote_send_operation(int operation, int rank) {
 	MPI_Send(&operation, 1, MPI_INT, rank, 0, MPI_COMM_WORLD);	
+	return 0;
 }
 
 int athread_remote_send_operation_to_master(int operation) {
 	athread_remote_send_operation(operation, 0);
+	return 0;
 }
 
 
