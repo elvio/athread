@@ -122,8 +122,6 @@ int aRemoteInit(int argc, char **argv) {
 	#endif
 	pthread_create(&listener_th, NULL, listener_thread, (void *)NULL);
 	pthread_join(listener_th, (void *) NULL);
-	
-	
 	return 0;
 }
 
