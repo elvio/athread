@@ -64,18 +64,17 @@ void *listener_thread(void *in) {
 			MPI_Irecv(&received_op[i], 1, MPI_INT, i, 0, MPI_COMM_WORLD, &requests[i]);
 		}
 
-		MPI_Waitany(athread_remote_size, requests, &handle_index, &status);
+		
 		while (1) {
+			MPI_Waitany(athread_remote_size, requests, &handle_index, &status);
 			// got a weired message buddy... i guess we have to ignore it. don't you?
 			if (handle_index <= 0 || handle_index > athread_remote_size) {
-				printf("waiting for any...\n");
+				printf("cleaned -- waiting for any again...\n");
 				free(requests);
 				requests = malloc(sizeof(MPI_Request) * athread_remote_size);
-				MPI_Waitany(athread_remote_size, requests, &handle_index, &status);
 				sleep(1);
 			} else {
 				printf("got message from #%d\n", handle_index);
-				printf("waiting any again\n");
 				sleep(1);
 			}
 		}
