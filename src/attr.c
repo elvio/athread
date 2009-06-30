@@ -300,4 +300,5 @@ int athread_attr_set_remote_ability(athread_attr_t *attr, int status) {
 		pthread_mutex_init(&new_remote_job->lock, NULL);
 		attr->remote_job = new_remote_job; 
 	}
+	return 0;
 }
