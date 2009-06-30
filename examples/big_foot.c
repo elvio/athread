@@ -88,8 +88,11 @@ int main(int argc, char *argv[]) {
 	
 	athread_attr_init(&remote1_attr);
 	athread_attr_init(&remote2_attr);
+	printf("11\n");
 	athread_attr_set_remote_ability(&remote1_attr, 1);
+	printf("22\n");
 	athread_attr_set_remote_ability(&remote2_attr, 1);
+	printf("33\n");
 	
 	printf("create 1\n");
 	athread_create(&remote_thread1, &remote1_attr, remote1, (void *) input_value);
