@@ -32,7 +32,7 @@ int remote_master() {
 
 
 int remote_slave() {
-	return ((athread_remote_rank != 0) ? 1 : 0);
+	return ((athread_remote_rank > 0) ? 1 : 0);
 }
 
 
@@ -54,9 +54,10 @@ void *listener_thread(void *in) {
 	MPI_Status status;
 	MPI_Request *requests;
 	
+	printf("Starting other process == %d\n", athread_remote_rank);
+	
 	// wait message form any slaves
 	if (remote_master()) {
-		
 		requests = malloc(sizeof(MPI_Request) * athread_remote_size);
 		
 		printf("starting as master\n");
@@ -83,16 +84,11 @@ void *listener_thread(void *in) {
 	// wait message from master
 	if (remote_slave()) {
 		printf("starting as slave\n");
-		sleep(3);
-		printf("sending op\n");
-		athread_remote_send_operation_to_master(OKS);
-		
-		printf("sending op\n");
-		athread_remote_send_operation_to_master(OKS);
-		
-		printf("sending op\n");
-		athread_remote_send_operation_to_master(OKS);
-		
+
+		for (i=0; i<10; i++) {
+			printf("sending op\n");
+			athread_remote_send_operation_to_master(OKS);
+		}
 	}
 }
 
