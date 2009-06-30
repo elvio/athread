@@ -37,6 +37,7 @@ int remote_slave() {
 
 
 int get_available_slave() {
+	int i;
 	for (i=0; i<athread_remote_size; i++) {
 		if (slave_status[i] == FRESH) {
 			return i;
