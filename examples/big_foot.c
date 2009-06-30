@@ -73,6 +73,8 @@ int main(int argc, char *argv[]) {
 	MPI_Comm_rank(MPI_COMM_WORLD, &athread_remote_rank);  
   MPI_Comm_size(MPI_COMM_WORLD, &athread_remote_size);
 
+	printf("started rank ==> %d\n", athread_remote_rank);
+
 	aRemoteInit(argc, argv);
 	aInit(&argc, &argv);
 	
