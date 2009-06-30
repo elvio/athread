@@ -237,8 +237,9 @@ int athread_attr_set_remote_ability(athread_attr_t *attr, int status);
 
 int athread_remote_size;
 int athread_remote_rank;
-pthread_t active_thread_th;
-pthread_t passive_thread_th;
+
+pthread_t singer_th;
+pthread_t listener_th;
 
 MPI_Status athread_remote_status_send;
 MPI_Status athread_remote_status_receive;

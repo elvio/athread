@@ -4,6 +4,7 @@
 #include "anahy/macros.h"
 
 #define MESSAGE_SIZE 3000
+static pthread_mutex_t remote_mutex_slave = PTHREAD_MUTEX_INITIALIZER;
 
 enum master_status {FRESH, WAITING_SLAVE, SLAVE_IS_DONE, DESCRIPTION_SENT, 
 	SLAVE_WANT_DATA, DATA_SENT, SLAVE_COMPLETED_COMPUTATION, 
@@ -13,8 +14,6 @@ enum master_status {FRESH, WAITING_SLAVE, SLAVE_IS_DONE, DESCRIPTION_SENT,
 enum operations {R_OP_READY};
 enum answers {R_A_READY};
 	
-	
-
 // int athread_remote_size;
 // int athread_remote_rank;
 // MPI_Status athread_remote_status_send;
@@ -59,7 +58,39 @@ int should_i_act_as_slave() {
 	return ((athread_remote_rank != 0) ? 1 : 0);
 }
 
-void *active_thread(void *in) {
+
+int get_available_slave() {
+	for (i=0; i<athread_remote_size; i++) {
+		if (slave_status[i] == FRESH) {
+			return i;
+		}
+	}
+	return -1;
+}
+
+void *listener_thread(void *in) {
+	int i;
+	int int_buf;
+	int op_rec;
+	MPI_Status status;
+	
+	if (should_i_act_as_master()) {
+		printf("Waiting all slaves get ready...\n");
+		for (i=1; i < athread_remote_size; i++) {
+			printf("Waiting #%d get ready...\n", i);
+			MPI_Recv(&op_rec, 1, MPI_INT, i, 0, MPI_COMM_WORLD, &status);
+		}
+	}
+	
+	if (should_i_act_as_slave()) {
+		while (1) {
+			MPI_Recv(&op_rec, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
+			handle_master_needs(op_rec);
+		}
+	}
+}
+
+void *singer_thread(void *in) {
 	int i;
 	int int_buf;
 	int op_rec;
@@ -73,19 +104,9 @@ void *active_thread(void *in) {
 	}
 }
 
-void *passive_thread(void *in) {
-	int i;
-	int int_buf;
-	int op_rec;
-	MPI_Status status;
+
+void handle_master_needs(int operation) {
 	
-	if (should_i_act_as_master()) {
-		printf("Waiting all slaves get ready...\n");
-		for (i=1; i < athread_remote_size; i++) {
-			printf("Waiting #%d get ready...\n", i);
-			MPI_Recv(&op_rec, 1, MPI_INT, i, 0, MPI_COMM_WORLD, &status);
-		}
-	}
 }
 
 int aRemoteInit(int argc, char **argv) {
@@ -108,15 +129,15 @@ int aRemoteInit(int argc, char **argv) {
 	#ifdef DEBUG
 		printf("Creating active thread...\n");
 	#endif
-	pthread_create(&active_thread_th, NULL, active_thread, (void *)NULL);
+	pthread_create(&singer_th, NULL, singer_thread, (void *)NULL);
 
 	#ifdef DEBUG
 		printf("Creating passive thread...\n");
 	#endif
-	pthread_create(&passive_thread_th, NULL, passive_thread, (void *)NULL);
+	pthread_create(&listener_th, NULL, listener_thread, (void *)NULL);
 	
-	pthread_join(active_thread_th, (void *) NULL);
-	pthread_join(passive_thread_th, (void *) NULL);
+	pthread_join(singer_th, (void *) NULL);
+	pthread_join(listener_th, (void *) NULL);
 	
 	
 	return 0;
@@ -127,7 +148,14 @@ int aRemoteTerminate() {
 }
 
 int athread_remote_send_job(struct job *job) {
+	int slave;
 	Pthread_mutex_lock(job->job_list.mutex);
 	job->status = JOB_EXECUTING;
 	pthread_mutex_unlock(job->job_list.mutex);
+	slave = get_available_slave();
+	if (slave == -1) {
+		printf("Could not find a available slave to execute remote thread\n");
+		return 0;
+	}
+	
 }
