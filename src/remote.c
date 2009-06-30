@@ -121,5 +121,14 @@ int athread_remote_send_job(struct job *job) {
 		printf("Could not find a available slave to execute remote thread\n");
 		return 0;
 	}
-	
 }
+
+int athread_remote_send_operation(int operation, int rank) {
+	MPI_Send(&operation, 1, MPI_INT, rank, 0, MPI_COMM_WORLD);	
+}
+
+int athread_remote_send_operation_to_master(int operation) {
+	athread_remote_send_operation(operation, 0);
+}
+
+
