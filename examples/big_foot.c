@@ -91,14 +91,19 @@ int main(int argc, char *argv[]) {
 	athread_attr_set_remote_ability(&remote1_attr, 1);
 	athread_attr_set_remote_ability(&remote2_attr, 1);
 	
+	printf("create 1\n");
 	athread_create(&remote_thread1, &remote1_attr, remote1, (void *) input_value);
+	printf("create 2\n");
 	athread_create(&remote_thread2, &remote2_attr, remote2, (void *) input_value);
 	
 	
 	// athread_join(local_thread1, (void*)NULL);
 	// athread_join(local_thread2, (void*)NULL);
 	
+	printf("join 1\n");
 	athread_join(remote_thread1, (void*)NULL);
+	
+	printf("join 2\n");
 	athread_join(remote_thread2, (void*)NULL);
 	
 	aTerminate();
