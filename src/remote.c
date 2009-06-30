@@ -72,6 +72,7 @@ void *listener_thread(void *in) {
 		
 		printf("starting as master\n");
 		for (i = 1; i < athread_remote_size; ++i) {
+			printf("receiving...\n");
 			MPI_Irecv(&received_op[i], 1, MPI_INT, i, 0, MPI_COMM_WORLD, &requests[i]);
 		}
 
@@ -145,7 +146,7 @@ int athread_remote_send_job(struct job *job) {
 
 int athread_remote_send_operation(int operation, int rank) {
 	MPI_Request request;
-	MPI_Isend(&operation, 1, MPI_INT, rank, 0, MPI_COMM_WORLD, &request);	
+	//MPI_Isend(&operation, 1, MPI_INT, rank, 0, MPI_COMM_WORLD, &request);	
 	return 0;
 }
 
