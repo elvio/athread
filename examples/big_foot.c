@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "athread.h"
 
-#define MAX 100
+#define MAX 5
 
 void *local1(void *input) {
 	int i;
@@ -77,10 +77,10 @@ int main(int argc, char *argv[]) {
 	aInit(&argc, &argv);
 	
 	
-	// create local threads and let it runnn...
-	athread_create(&local_thread1, NULL, local1, (void *) NULL);
-	athread_create(&local_thread2, NULL, local2, (void *) NULL);
-
+	// // create local threads and let it runnn...
+	// 	athread_create(&local_thread1, NULL, local1, (void *) NULL);
+	// 	athread_create(&local_thread2, NULL, local2, (void *) NULL);
+	
 	// create remote threads and let ir runn.. too..
 	*input_value = 10;
 	
