@@ -60,16 +60,16 @@ void *listener_thread(void *in) {
 		for (i = 1; i < athread_remote_size; ++i) {
 			MPI_Irecv(&received_op[i], 1, MPI_INT, i, 0, MPI_COMM_WORLD, &requests[i]);
 		}
-		
+
+		MPI_Waitany(athread_remote_size, requests, &handle_index, &status);
 		while (1) {
-			MPI_Waitany(athread_remote_size, requests, &handle_index, &status);
-			
 			// got a weired message buddy... i guess we have to ignore it. don't you?
 			if (handle_index <= 0 || handle_index > athread_remote_size) {
 				sleep(1);
 			} else {
-				printf("Got message from #%d\n", handle_index);
-				MPI_Start(requests[handle_index]);
+				printf("waiting any again");
+				sleep(1);
+				MPI_Waitany(athread_remote_size, requests, &handle_index, &status);
 			}
 		}
 	}
