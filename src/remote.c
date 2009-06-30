@@ -80,6 +80,15 @@ void *listener_thread(void *in) {
 		sleep(5);
 		printf("sending op\n");
 		athread_remote_send_operation_to_master(OKS);
+		
+		sleep(3);
+		printf("sending op\n");
+		athread_remote_send_operation_to_master(OKS);
+		
+		sleep(5);
+		printf("sending op\n");
+		athread_remote_send_operation_to_master(OKS);
+		
 	}
 }
 
