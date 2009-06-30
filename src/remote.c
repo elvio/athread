@@ -66,11 +66,12 @@ void *listener_thread(void *in) {
 			// got a weired message buddy... i guess we have to ignore it. don't you?
 			if (handle_index <= 0 || handle_index > athread_remote_size) {
 				printf("waiting for any...\n");
+				MPI_Waitany(athread_remote_size, requests, &handle_index, &status);
 				sleep(1);
 			} else {
+				printf("got message from #%d\n", handle_index);
 				printf("waiting any again\n");
 				sleep(1);
-				MPI_Waitany(athread_remote_size, requests, &handle_index, &status);
 			}
 		}
 	}
