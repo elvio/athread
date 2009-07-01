@@ -144,8 +144,8 @@ void *athread_remote_master_new_task_thread(void *in) {
 	sleep(1);
 	
 	// arakiri
-	printf("ARAKIRI -- new_task_thread\n");
-	pthread_cancel(pthread_self());
+	//printf("ARAKIRI -- new_task_thread\n");
+	//pthread_cancel(pthread_self());
 }
 
 void *athread_remote_slave_send_oks(void *in) {
