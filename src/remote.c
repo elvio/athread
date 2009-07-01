@@ -4,6 +4,7 @@
 #include "anahy/macros.h"
 
 #define MESSAGE_SIZE 3000
+#define MASTER_ID 0
 static pthread_mutex_t remote_mutex_slave = PTHREAD_MUTEX_INITIALIZER;
 
 enum shared_oper {FRESH, EXECUTING, OKS};	
@@ -21,6 +22,7 @@ enum slave_oper {S_OP_WTN_TASK_DESC, S_OP_WTN_TASK_DATA};
 	MPI_Recv(&op_rec, 1, MPI_INT, i, 0, MPI_COMM_WORLD, &status);
 	MPI_Send(&int_buf, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 */
+
 
 // hold status of each slave
 int *slave_status;
@@ -60,26 +62,6 @@ void *listener_thread(void *in) {
 	}
 }
 
-
-int aRemoteInit(int argc, char **argv) {
-	int i;
-	
-	#ifdef DEBUG
-		printf("MPI configuration is done. I guess it was the hard part ;)\n");
-	#endif
-
-	// init status of slaves
-	slave_status = malloc(sizeof(int) * (athread_remote_size-1));
-	for (i=0; i < athread_remote_size; i++){
-		slave_status[i] = FRESH;
-	}
-	
-	#ifdef DEBUG
-		printf("Slave status has been created with no sigfault. We are so lucky today...\n");
-	#endif
-	
-	return 0;
-}
 
 int aRemoteTerminate() {
 	return 0;
@@ -127,6 +109,18 @@ void *athread_remote_master_new_task_thread(void *in) {
 	// kill em self
 }
 
+void *athread_remote_slave_send_oks(void *in) {
+	int op_buf;
+	int op_rec;
+	
+	op_buf = OKS;
+	printf("Sending OKS to master...\n");
+	MPI_Send(&op_buf, 1, MPI_INT, MASTER_ID, 0, MPI_COMM_WORLD);
+
+	printf("Waiting TASK_DESC from master...\n");
+	MPI_Recv(&op_rec, 1, MPI_INT, MASTER_ID, 0, MPI_COMM_WORLD, &status);
+}
+
 int athread_remote_send_job(struct job *job) {
 	int slave;
 	struct remote_job_input *rinput;
@@ -157,3 +151,29 @@ int athread_remote_send_job(struct job *job) {
 	return 0;
 }
 
+int aRemoteInit(int argc, char **argv) {
+	int i;
+	pthread_t *slave_oks;
+	
+	#ifdef DEBUG
+		printf("MPI configuration is done. I guess it was the hard part ;)\n");
+	#endif
+
+	if (remote_master()) {
+		printf("Starting slave status...\n");
+		slave_status = malloc(sizeof(int) * (athread_remote_size-1));
+		for (i=0; i < athread_remote_size; i++){
+			slave_status[i] = FRESH;
+		}
+	} else if (remote_slave()) {
+		printf("Starting slave OKS thread...\n");
+		slave_oks = malloc(sizeof(pthread_t));
+		pthread_create(slave_oks, NULL, athread_remote_slave_send_oks, (void*) NULL);
+	}
+	
+	#ifdef DEBUG
+		printf("Slave status has been created with no sigfault. We are so lucky today...\n");
+	#endif
+	
+	return 0;
+}
