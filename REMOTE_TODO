@@ -41,3 +41,16 @@ TASK_DESC (recv OK)				OK (recv WAITING_TASK_DATA)
 MASTER																			SLAVE
 send(NEW_TASK) - wait(OK)										wait(NEW_TASK) - send(OK) - wait(TASK_DESC)
 send(TASK_DESC) - wait(OK) - wait(RESULT)		send(OK) - execute_task... - send(RESULT)
+
+
+
+
+
+Agora
+MASTER												SLAVE
+
+send(new task)								rec(new task)
+recv(ok)											send(ok)
+send(task desc)								rec(new task)
+wait(ok)											send(ok)
+wait(result)
