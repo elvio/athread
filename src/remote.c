@@ -55,42 +55,9 @@ void *listener_thread(void *in) {
 	MPI_Request *requests;
 	
 	printf("Starting other process == %d\n", athread_remote_rank);
-	
 	if (remote_slave()) {
-		printf("starting as slave\n");
-
-		for (i=0; i<10; i++) {
-			printf("sending op\n");
-			athread_remote_send_operation_to_master(OKS);
-		}
+		//
 	}
-	
-	
-	// wait message form any slaves
-	if (remote_master()) {
-		requests = malloc(sizeof(MPI_Request) * athread_remote_size);
-		
-		printf("starting as master\n");
-		for (i = 1; i < athread_remote_size; ++i) {
-			printf("receiving...\n");
-			MPI_Irecv(&received_op[i], 1, MPI_INT, i, 0, MPI_COMM_WORLD, &requests[i]);
-		}
-
-		// while (1) {
-		// 	MPI_Waitany(athread_remote_size, requests, &handle_index, &status);
-		// 	// got a weired message buddy... i guess we have to ignore it. don't you?
-		// 	if (handle_index <= 0 || handle_index > athread_remote_size) {
-		// 		printf("cleaned -- waiting for any again...\n");
-		// 		free(requests);
-		// 		requests = malloc(sizeof(MPI_Request) * athread_remote_size);
-		// 		sleep(1);
-		// 	} else {
-		// 		printf("got message from #%d\n", handle_index);
-		// 		sleep(1);
-		// 	}
-		// }
-	}
-	
 }
 
 
@@ -111,18 +78,6 @@ int aRemoteInit(int argc, char **argv) {
 		printf("Slave status has been created with no sigfault. We are so lucky today...\n");
 	#endif
 	
-	// #ifdef DEBUG
-	// 	printf("Creating active thread...\n");
-	// #endif
-	// pthread_create(&singer_th, NULL, singer_thread, (void *)NULL);
-	// pthread_join(singer_th, (void *) NULL);
-
-	#ifdef DEBUG
-		printf("Creating listener thread...\n");
-	#endif
-	
-	//pthread_create(&listener_th, NULL, listener_thread, (void *)NULL);
-	//pthread_join(listener_th, (void *) NULL);
 	return 0;
 }
 
@@ -132,6 +87,8 @@ int aRemoteTerminate() {
 
 int athread_remote_send_job(struct job *job) {
 	int slave;
+
+	printf("Start process to send remote job..\n");
 	Pthread_mutex_lock(job->job_list.mutex);
 	job->status = JOB_EXECUTING;
 	pthread_mutex_unlock(job->job_list.mutex);
@@ -142,16 +99,4 @@ int athread_remote_send_job(struct job *job) {
 	}
 	return 0;
 }
-
-int athread_remote_send_operation(int operation, int rank) {
-	MPI_Request request;
-	//MPI_Isend(&operation, 1, MPI_INT, rank, 0, MPI_COMM_WORLD, &request);	
-	return 0;
-}
-
-int athread_remote_send_operation_to_master(int operation) {
-	athread_remote_send_operation(operation, 0);
-	return 0;
-}
-
 
