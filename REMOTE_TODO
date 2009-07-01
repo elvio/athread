@@ -28,11 +28,16 @@ Mensagens
 
 MASTER										SLAVE
 NEW_TASK									OK (status: WAITING_TASK_DESC)
-TASK_DESC									OK (status: WAITING_TASK_DATA)
-TASK_DATA									OK (status: EXECUTING)
+TASK_DESC									OK (status: EXECUTING)
+									OK (status: EXECUTING)
 ---
 continue executing
 
 MASTER										SLAVE
 NEW_TASK (recv OK)				OK (recv WAITING_TASK_DESC)
 TASK_DESC (recv OK)				OK (recv WAITING_TASK_DATA)
+
+
+MASTER																			SLAVE
+send(NEW_TASK) - wait(OK)										wait(NEW_TASK) - send(OK) - wait(TASK_DESC)
+send(TASK_DESC) - wait(OK) - wait(RESULT)		send(OK) - execute_task... - send(RESULT)
