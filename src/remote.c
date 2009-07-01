@@ -162,16 +162,17 @@ void *athread_remote_slave_send_oks(void *in) {
 		return;
 	}
 	
-	printf("Sending OKS to master...\n");
+	printf("Got NEW_TASK -- Sending OKS to master...\n");
 	MPI_Send(&op_buf, 1, MPI_INT, MASTER_ID, 0, MPI_COMM_WORLD);
-	
-	sleep(1);
 	
 	printf("Waiting NEW_TASK_DESC from master --- slave #%d...\n", athread_remote_rank);
 	MPI_Recv(&op_rec, 1, MPI_INT, MASTER_ID, 0, MPI_COMM_WORLD, &status);
 	
 	printf("Got TASK_DESC. Sending OKS to master...\n");
 	MPI_Send(&op_buf, 1, MPI_INT, MASTER_ID, 0, MPI_COMM_WORLD);
+	
+	printf("Executing task...\n");
+	while (1);
 	
 	// execute job
 	// return value
