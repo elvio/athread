@@ -100,6 +100,8 @@ void *athread_remote_master_new_task_thread(void *in) {
 		exit(1);
 	}
 	
+	printf("Got OKS from %d\n", input->slave);
+	
 	// now we now slave is ready, time to send the task desc to it
 	// task_desc_thread = malloc(sizeof(pthread_t));
 	// pthread_create(task_desc_thread, NULL, athread_remote_master_task_desc, in);
@@ -115,11 +117,13 @@ void *athread_remote_slave_send_oks(void *in) {
 	MPI_Status status;
 	
 	op_buf = OKS;
+	printf("Waiting NEW_TASK from master from slave $%d...\n", athread_remote_rank);
+	MPI_Recv(&op_rec, 1, MPI_INT, MASTER_ID, 0, MPI_COMM_WORLD, &status);
+	
 	printf("Sending OKS to master...\n");
 	MPI_Send(&op_buf, 1, MPI_INT, MASTER_ID, 0, MPI_COMM_WORLD);
-
-	printf("Waiting TASK_DESC from master...\n");
-	MPI_Recv(&op_rec, 1, MPI_INT, MASTER_ID, 0, MPI_COMM_WORLD, &status);
+	
+	// create thread to receive task desc
 }
 
 int athread_remote_send_job(struct job *job) {
