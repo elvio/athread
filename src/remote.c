@@ -77,7 +77,28 @@ int aRemoteTerminate() {
 	Input data return size
 */
 void *athread_remote_master_task_desc(void *in) {
+	int op_buf;
+	int op_rec;
+	struct remote_job_input *input;
 	
+	input = (struct remote_job_input *) in;
+	pthread_t *task_desc_thread;
+	
+	MPI_Status status;
+	op_buf = M_OP_NEW_TASK;
+
+	printf("Sending TASK_DESC to %d...\n", input->slave);
+	MPI_Send(&op_buf, 1, MPI_INT, input->slave, 0, MPI_COMM_WORLD);
+
+	printf("Waiting OKS from %d...\n", input->slave);
+	MPI_Recv(&op_rec, 1, MPI_INT, input->slave, 0, MPI_COMM_WORLD, &status);
+	
+	printf("Waiting TASK_RESULT from %d...\n", input->slave);
+	MPI_Recv(&op_rec, 1, MPI_INT, input->slave, 0, MPI_COMM_WORLD, &status);
+	
+	// update value locally
+	// update job status
+	// update slave status
 }
 
 /*
@@ -149,7 +170,11 @@ void *athread_remote_slave_send_oks(void *in) {
 	printf("Waiting NEW_TASK_DESC from master --- slave #%d...\n", athread_remote_rank);
 	MPI_Recv(&op_rec, 1, MPI_INT, MASTER_ID, 0, MPI_COMM_WORLD, &status);
 	
-	// create thread to receive task desc
+	printf("Got TASK_DESC. Sending OKS to master...\n");
+	MPI_Send(&op_buf, 1, MPI_INT, MASTER_ID, 0, MPI_COMM_WORLD);
+	
+	// execute job
+	// return value
 }
 
 int athread_remote_send_job(struct job *job) {
