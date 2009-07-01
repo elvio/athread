@@ -201,11 +201,7 @@ int athread_remote_send_job(struct job *job) {
 	printf("Creating NEW_TASK thread\n");
 	new_task = malloc(sizeof(pthread_t));
 	pthread_create(new_task, NULL, athread_remote_master_new_task_thread, (void*) rinput);
-	pthread_join(*new_task, (void *) NULL);
-	
-	while (1) {
-		sleep(1);
-	}
+
 	return 0;
 }
 
@@ -227,9 +223,6 @@ int aRemoteInit(int argc, char **argv) {
 		printf("Starting slave OKS thread...\n");
 		slave_oks = malloc(sizeof(pthread_t));
 		pthread_create(slave_oks, NULL, athread_remote_slave_send_oks, (void*) NULL);
-		while (1) {
-			sleep(1);
-		}
 	}
 	
 	#ifdef DEBUG
