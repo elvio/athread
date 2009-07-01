@@ -204,6 +204,7 @@ int athread_remote_send_job(struct job *job) {
 	pthread_create(new_task, NULL, athread_remote_master_new_task_thread, (void*) rinput);
 	pthread_join(*new_task, (void *) NULL);
 	
+	while (1);
 	return 0;
 }
 
@@ -230,6 +231,6 @@ int aRemoteInit(int argc, char **argv) {
 	#ifdef DEBUG
 		printf("Slave status has been created with no sigfault. We are so lucky today...\n");
 	#endif
-	
+		
 	return 0;
 }
