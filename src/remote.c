@@ -87,7 +87,10 @@ int aRemoteTerminate() {
 
 int athread_remote_send_job(struct job *job) {
 	int slave;
-
+	
+	// return if process is a slave
+	if (remote_slave()) return 0;
+	
 	printf("Start process to send remote job..\n");
 	Pthread_mutex_lock(job->job_list.mutex);
 	job->status = JOB_EXECUTING;

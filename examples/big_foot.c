@@ -93,6 +93,7 @@ int main(int argc, char *argv[]) {
 	athread_create(&remote_thread1, &remote1_attr, remote1, (void *) input_value);
 	athread_create(&remote_thread2, &remote2_attr, remote2, (void *) input_value);
 	
+	
 	aTerminate();
 	return 0;
 }

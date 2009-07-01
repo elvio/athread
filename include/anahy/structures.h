@@ -238,6 +238,10 @@ int athread_attr_set_remote_ability(athread_attr_t *attr, int status);
 int athread_remote_size;
 int athread_remote_rank;
 
+int remote_master();
+int remote_slave();
+
+
 pthread_t singer_th;
 pthread_t listener_th;
 
