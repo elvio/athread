@@ -172,7 +172,9 @@ void *athread_remote_slave_send_oks(void *in) {
 	MPI_Send(&op_buf, 1, MPI_INT, MASTER_ID, 0, MPI_COMM_WORLD);
 	
 	printf("Executing task...\n");
-	while (1);
+	while (1) {
+		sleep(1);
+	}
 	
 	// execute job
 	// return value

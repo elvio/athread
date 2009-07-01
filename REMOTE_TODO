@@ -54,3 +54,16 @@ recv(ok)											send(ok)
 send(task desc)								rec(new task)
 wait(ok)											send(ok)
 wait(result)
+
+
+
+*** Quarta Feira
+Enviar job completo
+Executar Job
+Atualizar status
+
+
+*** Quinta Feira
+Retornar Resultado
+Atualizar master com resultado
+Fazer join funcionar com remoto
