@@ -173,7 +173,7 @@ void *athread_remote_slave_send_oks(void *in) {
 	
 	printf("Executing task...\n");
 	while (1) {
-		sleep(1);
+		sleep(5);
 	}
 	
 	// execute job
@@ -207,7 +207,9 @@ int athread_remote_send_job(struct job *job) {
 	pthread_create(new_task, NULL, athread_remote_master_new_task_thread, (void*) rinput);
 	pthread_join(*new_task, (void *) NULL);
 	
-	while (1);
+	while (1) {
+		sleep(3);
+	}
 	return 0;
 }
 
