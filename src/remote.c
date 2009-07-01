@@ -67,6 +67,19 @@ int aRemoteTerminate() {
 	return 0;
 }
 
+
+/*
+	Send task desc to slave
+	Registred task
+	Input data type
+	Input data size
+	Input data return type
+	Input data return size
+*/
+void *athread_remote_master_task_desc(void *in) {
+	
+}
+
 /*
 	Send a M_OP_NEW_TASK message to slave defined trhough *(int *) in
 	Wait for an OK. Fail if ok was not sent
@@ -102,15 +115,16 @@ void *athread_remote_master_new_task_thread(void *in) {
 	
 	printf("Got OKS from %d\n", input->slave);
 	
-	while (1);
-	
 	// now we now slave is ready, time to send the task desc to it
-	// task_desc_thread = malloc(sizeof(pthread_t));
-	// pthread_create(task_desc_thread, NULL, athread_remote_master_task_desc, in);
-	// 
-	// cria thread
-	// sleep
-	// kill em self
+	task_desc_thread = malloc(sizeof(pthread_t));
+	pthread_create(task_desc_thread, NULL, athread_remote_master_task_desc, in);
+	
+	// sleep for awhile and then kill this thread
+	sleep(1);
+	
+	// arakiri
+	printf("ARAKIRI -- new_task_thread\n");
+	pthread_kill(pthread_self());
 }
 
 void *athread_remote_slave_send_oks(void *in) {
