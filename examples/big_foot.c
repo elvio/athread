@@ -72,7 +72,6 @@ int main(int argc, char *argv[]) {
 	MPI_Init(&argc, &argv);
 	MPI_Comm_rank(MPI_COMM_WORLD, &athread_remote_rank);  
   MPI_Comm_size(MPI_COMM_WORLD, &athread_remote_size);
-
 	printf("started rank ==> %d\n", athread_remote_rank);
 
 	aRemoteInit(argc, argv);
@@ -88,26 +87,11 @@ int main(int argc, char *argv[]) {
 	
 	athread_attr_init(&remote1_attr);
 	athread_attr_init(&remote2_attr);
-	printf("11\n");
 	athread_attr_set_remote_ability(&remote1_attr, 1);
-	printf("22\n");
 	athread_attr_set_remote_ability(&remote2_attr, 1);
-	printf("33\n");
 	
-	printf("create 1\n");
 	athread_create(&remote_thread1, &remote1_attr, remote1, (void *) input_value);
-	printf("create 2\n");
 	athread_create(&remote_thread2, &remote2_attr, remote2, (void *) input_value);
-	
-	
-	// athread_join(local_thread1, (void*)NULL);
-	// athread_join(local_thread2, (void*)NULL);
-	
-	printf("join 1\n");
-	athread_join(remote_thread1, (void*)NULL);
-	
-	printf("join 2\n");
-	athread_join(remote_thread2, (void*)NULL);
 	
 	aTerminate();
 	return 0;
