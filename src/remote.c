@@ -172,10 +172,6 @@ void *athread_remote_slave_send_oks(void *in) {
 	MPI_Send(&op_buf, 1, MPI_INT, MASTER_ID, 0, MPI_COMM_WORLD);
 	
 	printf("Executing task...\n");
-	while (1) {
-		sleep(5);
-	}
-	
 	// execute job
 	// return value
 }
@@ -208,7 +204,7 @@ int athread_remote_send_job(struct job *job) {
 	pthread_join(*new_task, (void *) NULL);
 	
 	while (1) {
-		sleep(3);
+		sleep(1);
 	}
 	return 0;
 }
@@ -231,6 +227,9 @@ int aRemoteInit(int argc, char **argv) {
 		printf("Starting slave OKS thread...\n");
 		slave_oks = malloc(sizeof(pthread_t));
 		pthread_create(slave_oks, NULL, athread_remote_slave_send_oks, (void*) NULL);
+		while (1) {
+			sleep(1);
+		}
 	}
 	
 	#ifdef DEBUG
