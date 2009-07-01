@@ -294,7 +294,6 @@ int athread_attr_set_remote_ability(athread_attr_t *attr, int status) {
 	struct remote_job *new_remote_job;
 	
 	if (remote_slave()) {
-		printf("ignoring request to set remote ability coming from slave process\n");
 		return 0;
 	}
 	

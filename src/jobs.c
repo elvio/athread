@@ -209,6 +209,11 @@ int athread_create(athread_t *id, athread_attr_t *attribs, pfunc function, void 
 	struct job *job;
 	athread_t *vsplit;
 	int i, nt;
+
+	if (remote_slave() && attribs && attribs->remote_job) {
+		printf("Slave process cannot create remote_job. Ignoring...\n");
+		return 0;
+	}
 	
 	if ((!attribs) || (attribs->splitfactor <= 0)) nt = 0;
 	else nt = attribs->splitfactor - 1;
