@@ -38,9 +38,9 @@ int remote_slave() {
 
 int get_available_slave() {
 	int i;
-	for (i=0; i<athread_remote_size; i++) {
+	for (i=0; i < (athread_remote_size-1); i++) {
 		if (slave_status[i] == FRESH) {
-			return i;
+			return i+1;
 		}
 	}
 	return -1;
@@ -69,7 +69,7 @@ int aRemoteInit(int argc, char **argv) {
 	#endif
 
 	// init status of slaves
-	slave_status = malloc(sizeof(int) * athread_remote_size);
+	slave_status = malloc(sizeof(int) * (athread_remote_size-1));
 	for (i=0; i < athread_remote_size; i++){
 		slave_status[i] = FRESH;
 	}
