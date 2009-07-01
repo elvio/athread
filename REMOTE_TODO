@@ -20,6 +20,9 @@ condicional, remote pega lock e usa buffer, limpando buffer e alterando status d
 usado.
 
 
+Talvez trocar o status de EXECUTING para EXECUTING_REMOTE
+
+
 
 Mensagens
 
@@ -29,3 +32,7 @@ TASK_DESC									OK (status: WAITING_TASK_DATA)
 TASK_DATA									OK (status: EXECUTING)
 ---
 continue executing
+
+MASTER										SLAVE
+NEW_TASK (recv OK)				OK (recv WAITING_TASK_DESC)
+TASK_DESC (recv OK)				OK (recv WAITING_TASK_DATA)
