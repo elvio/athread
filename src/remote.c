@@ -117,11 +117,19 @@ void *athread_remote_slave_send_oks(void *in) {
 	MPI_Status status;
 	
 	op_buf = OKS;
-	printf("Waiting NEW_TASK from master from slave $%d...\n", athread_remote_rank);
+	printf("Waiting NEW_TASK from master --- slave #%d...\n", athread_remote_rank);
 	MPI_Recv(&op_rec, 1, MPI_INT, MASTER_ID, 0, MPI_COMM_WORLD, &status);
+
+	if (op_rec != M_OP_NEW_TASK) {
+		printf("Waiting NEW_TASK operation but got %d\n", op_rec);
+		return;
+	}
 	
 	printf("Sending OKS to master...\n");
 	MPI_Send(&op_buf, 1, MPI_INT, MASTER_ID, 0, MPI_COMM_WORLD);
+	
+	printf("Waiting NEW_TASK_DESC from master --- slave #%d...\n", athread_remote_rank);
+	MPI_Recv(&op_rec, 1, MPI_INT, MASTER_ID, 0, MPI_COMM_WORLD, &status);
 	
 	// create thread to receive task desc
 }
