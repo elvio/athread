@@ -112,6 +112,7 @@ void *athread_remote_master_new_task_thread(void *in) {
 void *athread_remote_slave_send_oks(void *in) {
 	int op_buf;
 	int op_rec;
+	MPI_Status status;
 	
 	op_buf = OKS;
 	printf("Sending OKS to master...\n");
