@@ -233,6 +233,11 @@ int athread_attr_set_mergefunction(athread_attr_t *attr, void *(* merge)(void *,
 
 
 /* use by remote code */
+struct remote_job_input {
+	struct job *job;
+	int slave;
+};
+
 int athread_attr_set_remote_ability(athread_attr_t *attr, int status);
 
 int athread_remote_size;

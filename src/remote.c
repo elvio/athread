@@ -85,8 +85,52 @@ int aRemoteTerminate() {
 	return 0;
 }
 
+/*
+	Send a M_OP_NEW_TASK message to slave defined trhough *(int *) in
+	Wait for an OK. Fail if ok was not sent
+	MPI_Recv(&op_rec, 1, MPI_INT, i, 0, MPI_COMM_WORLD, &status);
+	MPI_Send(&int_buf, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
+	struct remote_job_input {
+		struct job *job;
+		int slave;
+	};
+	
+*/
+void *athread_remote_master_new_task_thread(void *in) {
+	int op_buf;
+	int op_rec;
+	struct remote_job_input *input;
+	
+	input = (struct remote_job_input *) in;
+	pthread_t *task_desc_thread;
+	
+	MPI_Status status;
+	op_buf = M_OP_NEW_TASK;
+
+	printf("Sending M_OP_NEW_TASK to %d...\n", input->slave);
+	MPI_Send(&op_buf, 1, MPI_INT, input->slave, 0, MPI_COMM_WORLD);
+
+	printf("Waiting OKS from %d...\n", input->slave);
+	MPI_Recv(&op_rec, 1, MPI_INT, input->slave, 0, MPI_COMM_WORLD, &status);
+	
+	if (op_rec != OKS) {
+		printf("Waiting %d from slave but got a %d. Aborting...\n", OKS, op_rec);
+		exit(1);
+	}
+	
+	// now we now slave is ready, time to send the task desc to it
+	// task_desc_thread = malloc(sizeof(pthread_t));
+	// pthread_create(task_desc_thread, NULL, athread_remote_master_task_desc, in);
+	// 
+	// cria thread
+	// sleep
+	// kill em self
+}
+
 int athread_remote_send_job(struct job *job) {
 	int slave;
+	struct remote_job_input *rinput;
+	pthread_t *new_task;
 	
 	// return if process is a slave
 	if (remote_slave()) return 0;
@@ -100,6 +144,15 @@ int athread_remote_send_job(struct job *job) {
 		printf("Could not find a available slave to execute remote thread\n");
 		return 1;
 	}
+	
+	rinput = malloc(sizeof(struct remote_job_input));
+	rinput->job = job;
+	rinput->slave = slave;
+	
+	printf("Creating NEW_TASK thread\n");
+	new_task = malloc(sizeof(pthread_t));
+	pthread_create(new_task, NULL, athread_remote_master_new_task_thread, (void*) rinput);
+	
 	return 0;
 }
 
