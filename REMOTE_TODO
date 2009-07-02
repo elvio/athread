@@ -48,7 +48,7 @@ send(TASK_DESC) - wait(OK) - wait(RESULT)		send(OK) - execute_task... - send(RES
 
 Agora
 MASTER												SLAVE
-
+recv(ok)											send(ok)
 send(new task)								rec(new task)
 recv(ok)											send(ok)
 send(task desc)								rec(new task)
@@ -57,13 +57,13 @@ wait(result)
 
 
 
-*** Quarta Feira
+*** Sexta
 Enviar job completo
 Executar Job
 Atualizar status
 
 
-*** Quinta Feira
+*** Sábado
 Retornar Resultado
 Atualizar master com resultado
 Fazer join funcionar com remoto

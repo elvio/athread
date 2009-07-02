@@ -307,3 +307,13 @@ int athread_attr_set_remote_ability(athread_attr_t *attr, int status) {
 	}
 	return 0;
 }
+
+int athread_attr_set_remote_service(athread_attr_t *attr, int service) {
+	if (!attr || !(attr->remote_job)) {
+		printf("got a invalid attr or attr->remote_job. Aborting...\n");
+		exit(1);
+	}
+	
+	attr->remote_job.service_id = service;
+	return 0;
+}

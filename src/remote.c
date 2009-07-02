@@ -8,8 +8,7 @@
 static pthread_mutex_t remote_mutex_slave = PTHREAD_MUTEX_INITIALIZER;
 
 enum shared_oper {FRESH, EXECUTING, OKS};	
-enum master_oper {M_OP_NEW_TASK, M_OP_TASK_DESC, M_OP_TASK_DATA};
-enum slave_oper {S_OP_WTN_TASK_DESC, S_OP_WTN_TASK_DATA};
+enum master_oper {NEW_TASK, NEW_TASK_DATA};
 	
 // int athread_remote_size;
 // int athread_remote_rank;
@@ -48,159 +47,133 @@ int get_available_slave() {
 	return -1;
 }
 
-void *listener_thread(void *in) {
-	int i;
-	int int_buf;
-	int received_op[athread_remote_size];
-	int handle_index;
-	MPI_Status status;
-	MPI_Request *requests;
+
+void *athread_remote_slave_wait_master_task(void *in) {
+	int op_buf;
+	int op_rec;
+	MPI_Status *status;
 	
-	printf("Starting other process == %d\n", athread_remote_rank);
-	if (remote_slave()) {
-		//
-	}
+	status = NULL;
+	status = malloc(sizeof(MPI_Status));
+	free(status);
 }
 
+/*
+	Receive a INT == operation
+*/
+int receive_op_from_slave(int slave) {
+	int op_rec;
+	MPI_Status status;
+	MPI_Recv(&op_rec, 1, MPI_INT, slave, 0, MPI_COMM_WORLD, &status);
+	return op_rec;
+}
 
-int aRemoteTerminate() {
-	return 0;
+/*
+	Send operation code to slave
+*/
+void send_op_to_slave(int slave, int operation) {
+	MPI_Send(&operation, 1, MPI_INT, slave, 0, MPI_COMM_WORLD);
 }
 
 
 /*
-	Send task desc to slave
-	Registred task
-	Input data type
-	Input data size
-	Input data return type
-	Input data return size
+	Receive a INT == operation from MASTER
 */
-void *athread_remote_master_task_desc(void *in) {
-	int op_buf;
+int receive_op_from_master() {
 	int op_rec;
-	struct remote_job_input *input;
-	
-	input = (struct remote_job_input *) in;
-	pthread_t *task_desc_thread;
-	
 	MPI_Status status;
-	op_buf = M_OP_NEW_TASK;
-
-	printf("Sending TASK_DESC to %d...\n", input->slave);
-	MPI_Send(&op_buf, 1, MPI_INT, input->slave, 0, MPI_COMM_WORLD);
-
-	printf("Waiting OKS from %d...\n", input->slave);
-	MPI_Recv(&op_rec, 1, MPI_INT, input->slave, 0, MPI_COMM_WORLD, &status);
-	
-	printf("Waiting TASK_RESULT from %d...\n", input->slave);
-	MPI_Recv(&op_rec, 1, MPI_INT, input->slave, 0, MPI_COMM_WORLD, &status);
-	
-	// update value locally
-	// update job status
-	// update slave status
+	MPI_Recv(&op_rec, 1, MPI_INT, MASTER_ID, 0, MPI_COMM_WORLD, &status);
+	return op_rec;
 }
 
 /*
-	Send a M_OP_NEW_TASK message to slave defined trhough *(int *) in
-	Wait for an OK. Fail if ok was not sent
-	MPI_Recv(&op_rec, 1, MPI_INT, i, 0, MPI_COMM_WORLD, &status);
-	MPI_Send(&int_buf, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
-	struct remote_job_input {
-		struct job *job;
-		int slave;
-	};
-	
+	Send operation code to MASTER
 */
-void *athread_remote_master_new_task_thread(void *in) {
-	int op_buf;
-	int op_rec;
-	struct remote_job_input *input;
-	
-	input = (struct remote_job_input *) in;
-	pthread_t *task_desc_thread;
-	
-	MPI_Status status;
-	op_buf = M_OP_NEW_TASK;
+void send_op_to_master(int operation) {
+	MPI_Send(&operation, 1, MPI_INT, MASTER_ID, 0, MPI_COMM_WORLD);
+}
 
-	printf("Sending M_OP_NEW_TASK to %d...\n", input->slave);
-	MPI_Send(&op_buf, 1, MPI_INT, input->slave, 0, MPI_COMM_WORLD);
-
-	printf("Waiting OKS from %d...\n", input->slave);
-	MPI_Recv(&op_rec, 1, MPI_INT, input->slave, 0, MPI_COMM_WORLD, &status);
+/*
+	request ok from slave and abort if it fails
+*/
+void request_ok_from_slave(int slave) {
+	printf("Waiting OKS from slave %d\n", slave);
+	op_rec = receive_op_from_slave(slave);
+	printf("Got it\n");
 	
 	if (op_rec != OKS) {
-		printf("Waiting %d from slave but got a %d. Aborting...\n", OKS, op_rec);
+		printf("(SLAVE %d) -- We were want a OKS operation but got other... Aborting...\n", slave);
 		exit(1);
 	}
-	
-	printf("Got OKS from %d\n", input->slave);
-	
-	// now we now slave is ready, time to send the task desc to it
-	task_desc_thread = malloc(sizeof(pthread_t));
-	pthread_create(task_desc_thread, NULL, athread_remote_master_task_desc, in);
-	
-	// sleep for awhile and then kill this thread
-	sleep(1);
-	
-	// arakiri
-	//printf("ARAKIRI -- new_task_thread\n");
-	//pthread_cancel(pthread_self());
 }
 
-void *athread_remote_slave_send_oks(void *in) {
+/*
+	create a thread to handle the new remote job
+	input:
+		rinput->job = job;
+		rinput->slave = slave;
+*/
+void *athread_remote_master_execute_job(void *in) {
 	int op_buf;
 	int op_rec;
-	MPI_Status status;
+	MPI_Status *status;
+	struct remote_job_input *remote_job_input = (struct remote_job_input *) in;
 	
-	op_buf = OKS;
-	printf("Waiting NEW_TASK from master --- slave #%d...\n", athread_remote_rank);
-	MPI_Recv(&op_rec, 1, MPI_INT, MASTER_ID, 0, MPI_COMM_WORLD, &status);
+	/*
+		**** steps to take ***
+		----------------------
+		recv ok from slave
+		send new task
+		recv ok
+		send task
+		recv ok
+		recv result
+		update status
+		mark job as done
+	*/
 
-	if (op_rec != M_OP_NEW_TASK) {
-		printf("Waiting NEW_TASK operation but got %d -- slave #%d\n", op_rec, athread_remote_rank);
-		return;
-	}
+	request_slave_ok(remote_job_input->slave);
 	
-	printf("Got NEW_TASK -- slave #%d -- Sending OKS to master...\n", athread_remote_rank);
-	MPI_Send(&op_buf, 1, MPI_INT, MASTER_ID, 0, MPI_COMM_WORLD);
+	printf("Send new task request to slave %d\n", remote_job_input->slave);
+	send_op_to_slave(remote_job_input->slave, NEW_TASK);
+	printf("Sent done. Slave %d got it\n", remote_job_input->slave);
 	
-	printf("Waiting NEW_TASK_DESC from master --- slave #%d...\n", athread_remote_rank);
-	MPI_Recv(&op_rec, 1, MPI_INT, MASTER_ID, 0, MPI_COMM_WORLD, &status);
+	request_slave_ok(remote_job_input->slave);
 	
-	printf("Got TASK_DESC -- slave #%d -- Sending OKS to master...\n", athread_remote_rank);
-	MPI_Send(&op_buf, 1, MPI_INT, MASTER_ID, 0, MPI_COMM_WORLD);
+	printf("Sending task to slave %d\n", remote_job_input->slave);
 	
-	printf("Executing task...\n");
-	// execute job
-	// return value
+	printf("Task was sent. Slave %d got it. Waiting result\n", remote_job_input->slave);
+	
 }
 
 int athread_remote_send_job(struct job *job) {
 	int slave;
 	struct remote_job_input *rinput;
-	pthread_t *new_task;
+	pthread_t *remote_job;
 	
 	// return if process is a slave
 	if (remote_slave()) return 0;
 	
 	printf("Start process to send remote job..\n");
+
 	Pthread_mutex_lock(job->job_list.mutex);
 	job->status = JOB_EXECUTING;
 	pthread_mutex_unlock(job->job_list.mutex);
+
 	slave = get_available_slave();
 	if (slave == -1) {
 		printf("Could not find a available slave to execute remote thread\n");
 		return 1;
 	}
-	
+
+	// create input to new job
 	rinput = malloc(sizeof(struct remote_job_input));
 	rinput->job = job;
 	rinput->slave = slave;
 	
-	printf("Creating NEW_TASK thread\n");
-	new_task = malloc(sizeof(pthread_t));
-	pthread_create(new_task, NULL, athread_remote_master_new_task_thread, (void*) rinput);
+	// create thread to handle new job
+	remote_job = malloc(sizeof(pthread_t));
+	pthread_create(remote_job, NULL, athread_remote_master_execute_job, (void *) rinput);
 
 	return 0;
 }
@@ -230,4 +203,11 @@ int aRemoteInit(int argc, char **argv) {
 	#endif
 		
 	return 0;
+}
+
+
+int athread_remote_register_service(int service, void *(*function)(void *)) {
+	registred_services[registred_services_index].service = service;
+	registred_services[registred_services_index].function = function;
+	registred_services_index+=1;
 }
