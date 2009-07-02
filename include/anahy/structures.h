@@ -233,6 +233,7 @@ int athread_attr_set_mergefunction(athread_attr_t *attr, void *(* merge)(void *,
 
 
 /* use by remote code */
+int athread_attr_set_remote_ability(athread_attr_t *attr, int status);
 int athread_remote_register_service(int service, void *(*function)(void *));
 
 struct remote_job_input {
@@ -248,7 +249,6 @@ struct remote_service {
 int registred_services_index;
 struct remote_service registred_services[100];
 
-int athread_attr_set_remote_ability(athread_attr_t *attr, int status);
 
 int athread_remote_size;
 int athread_remote_rank;

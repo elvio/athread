@@ -35,7 +35,6 @@ int main(int argc, char *argv[]) {
 	
 	// register service
 	athread_remote_register_service(REMOTE_SERVICE_ID, remote_th);
-
 	
 	athread_attr_init(&remote_thread_attr);
 	athread_attr_set_remote_ability(&remote_thread_attr, 1);
