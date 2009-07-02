@@ -204,3 +204,10 @@ int aRemoteInit(int argc, char **argv) {
 		
 	return 0;
 }
+
+
+int athread_remote_register_service(int service, void *(*function)(void *)) {
+	registred_services[registred_services_index].service = service;
+	registred_services[registred_services_index].function = function;
+	registred_services_index+=1;
+}

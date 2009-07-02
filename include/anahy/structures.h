@@ -79,7 +79,7 @@ struct remote_job {
 	time_t started_at;
 	int data_type;
 	size_t data_size;
-	char *label;
+	int service_id;
 	int return_data_type;
 	size_t return_data_size;
 	pthread_mutex_t lock;
@@ -233,10 +233,20 @@ int athread_attr_set_mergefunction(athread_attr_t *attr, void *(* merge)(void *,
 
 
 /* use by remote code */
+int athread_remote_register_service(int service, void *(*function)(void *));
+
 struct remote_job_input {
 	struct job *job;
 	int slave;
 };
+
+struct remote_service {
+	int tag;
+	void *(*function)(void *);
+};
+
+int registred_services_index;
+struct remote_service registred_services[100];
 
 int athread_attr_set_remote_ability(athread_attr_t *attr, int status);
 
