@@ -242,7 +242,7 @@ struct remote_job_input {
 };
 
 struct remote_service {
-	int tag;
+	int service_id;
 	void *(*function)(void *);
 };
 
