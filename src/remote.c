@@ -108,6 +108,15 @@ void request_ok_from_slave(int slave) {
 }
 
 /*
+	create a thread to handle slave content
+*/
+void *athread_remote_slave_execute_job(void *in) {
+	return (void *)NULL;
+}
+
+
+
+/*
 	create a thread to handle the new remote job
 	input:
 		rinput->job = job;
@@ -195,7 +204,7 @@ int aRemoteInit(int argc, char **argv) {
 	} else if (remote_slave()) {
 		printf("Starting slave OKS thread...\n");
 		slave_oks = malloc(sizeof(pthread_t));
-		pthread_create(slave_oks, NULL, athread_remote_slave_send_oks, (void*) NULL);
+		pthread_create(slave_oks, NULL, athread_remote_slave_execute_job, (void*) NULL);
 	}
 	
 	#ifdef DEBUG
