@@ -19,6 +19,7 @@ int main(int argc, char *argv[]) {
 	athread_attr_t remote_thread_attr;
 	
 	int *input_value = malloc(sizeof(int));
+	int *result;
 	
 	MPI_Init(&argc, &argv);
 	MPI_Comm_rank(MPI_COMM_WORLD, &athread_remote_rank);  
@@ -41,7 +42,7 @@ int main(int argc, char *argv[]) {
 	athread_attr_set_remote_service(&remote_thread_attr, REMOTE_SERVICE_ID);
 	
 	athread_create(&remote_thread, &remote_thread_attr, remote_th, (void *) input_value);
-	athread_join(remote_thread);
+	athread_join(remote_thread, (void*) result);
 	
 	
 	aTerminate();
