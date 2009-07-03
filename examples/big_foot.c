@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
 	athread_attr_set_remote_service(&remote_thread_attr, REMOTE_SERVICE_ID);
 	
 	athread_create(&remote_thread, &remote_thread_attr, remote_th, (void *) input_value);
-	athread_join(remote_thread, (void*) result);
+	//athread_join(remote_thread, (void*) result);
 	
 	
 	aTerminate();
