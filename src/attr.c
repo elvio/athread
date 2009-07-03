@@ -314,6 +314,6 @@ int athread_attr_set_remote_service(athread_attr_t *attr, int service) {
 		exit(1);
 	}
 	
-	attr->remote_job.service_id = service;
+	attr->remote_job->service_id = service;
 	return 0;
 }
