@@ -261,7 +261,11 @@ int athread_create(athread_t *id, athread_attr_t *attribs, pfunc function, void 
 		pthread_cond_init(&job->steal_cond, NULL);
 		init_list_head(&job->child_list, 1);
 
-		if (list_size(engine.vp_list) < engine.max_vps) {
+		if (attribs->remote_job) {
+			job->status = JOB_ASSIGNED;
+			store_on_joblist(job);
+			athread_remote_send_job(job);
+		} else if (list_size(engine.vp_list) < engine.max_vps) {
 			job->status = JOB_ASSIGNED;
 			store_on_joblist(job);
 			job->owner = create_vp(job);
