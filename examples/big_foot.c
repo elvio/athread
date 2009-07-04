@@ -10,16 +10,21 @@
 
 
 void *remote_th(void *in) {
-	printf("I am inside remote_th...\n");
-	return (void*) NULL;
+	int *result = malloc(sizeof(int));
+	
+	printf("remote_th --- remote_athread_rank == %d\n", remote_athread_rank);
+	*result = *(int *) in;
+	*result += 10;
+	
+	return (void *) result;
 }
 
 int main(int argc, char *argv[]) {
 	athread_t remote_thread;
 	athread_attr_t remote_thread_attr;
 	
-	int *input_value = malloc(sizeof(int));
-	int *result;
+	double *input_value = malloc(sizeof(double));
+	double *result;
 	
 	MPI_Init(&argc, &argv);
 	MPI_Comm_rank(MPI_COMM_WORLD, &athread_remote_rank);  
