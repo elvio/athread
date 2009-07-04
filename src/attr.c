@@ -309,6 +309,11 @@ int athread_attr_set_remote_ability(athread_attr_t *attr, int status) {
 }
 
 int athread_attr_set_remote_service(athread_attr_t *attr, int service) {
+	if (athread_remote_rank != 0) {
+		printf("slave can't set remote ability\n");
+		return 0;
+	}
+	
 	if (!attr || !(attr->remote_job)) {
 		printf("got a invalid attr or attr->remote_job. Aborting...\n");
 		exit(1);

@@ -210,6 +210,10 @@ int athread_create(athread_t *id, athread_attr_t *attribs, pfunc function, void 
 	athread_t *vsplit;
 	int i, nt;
 
+	if (athread_remote_rank != 0 && attribs && attribs->remote_job) {
+		printf("preventing slave to create a remote job\n");
+		return 0;
+	}
 	
 	if ((!attribs) || (attribs->splitfactor <= 0)) nt = 0;
 	else nt = attribs->splitfactor - 1;
