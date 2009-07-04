@@ -7,7 +7,7 @@
 #define MASTER_ID 0
 static pthread_mutex_t slave_status_mutex = PTHREAD_MUTEX_INITIALIZER;
 static pthread_mutex_t available_slave_mutex = PTHREAD_MUTEX_INITIALIZER;
-static pthread_cond_t available_slave_cond = PTHREAD_COND_INITIALIZE;
+static pthread_cond_t available_slave_cond = PTHREAD_COND_INITIALIZER;
 
 enum shared_oper {FRESH, BUSY, OKS};	
 enum master_oper {NEW_TASK, NEW_TASK_DATA};
