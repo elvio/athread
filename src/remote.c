@@ -176,13 +176,15 @@ void send_service_id_to_slave(int service_id, int slave) {
 }
 
 void send_service_data_input_to_slave(double job_input_data, int slave) {
-	printf("Sending input data(%d) to slave = %d\n", job_input_data, slave);
+	printf("Sending input data(%f) to slave = %d\n", job_input_data, slave);
 	MPI_Send(&job_input_data, 1, MPI_DOUBLE, slave, 0, MPI_COMM_WORLD);
-	printf("Input data sent --- input data = %d to slave = %d\n", job_input_data, slave);
+	printf("Input data sent --- input data = %f	 to slave = %d\n", job_input_data, slave);
 }
 
 double request_result_from_slave(int slave) {
+	MPI_Status status;
 	double result;
+	
 	printf("Requesting result from slave #%d\n", slave);
 	MPI_Recv(&result, 1, MPI_DOUBLE, MASTER_ID, 0, MPI_COMM_WORLD, &status);
 	printf("Got result from slave #%d. Time to finish\n", slave);
@@ -219,7 +221,7 @@ void *athread_remote_master_execute_job(void *in) {
 	*/
 
 	request_ok_from_slave(remote_job_input->slave);
-	send_service_id_to_slave(job->attribs->remote_job->service_id, remote_job_input->slave);
+	send_service_id_to_slave(job->attribs->remote_job.service_id, remote_job_input->slave);
 	request_ok_from_slave(remote_job_input->slave);
 	
 	job_data = *(double*) job->data;
