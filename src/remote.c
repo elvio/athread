@@ -189,9 +189,11 @@ int athread_remote_send_job(struct job *job) {
 	rinput->slave = slave;
 	
 	// create thread to handle new job
+	printf("Creating thread to send job\n");
 	remote_job = malloc(sizeof(pthread_t));
 	pthread_create(remote_job, NULL, athread_remote_master_execute_job, (void *) rinput);
-
+	printf("Thread was created buddy...\n");
+	
 	return 0;
 }
 
