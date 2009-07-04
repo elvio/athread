@@ -39,6 +39,7 @@ int remote_slave() {
 
 int get_available_slave() {
 	int i;
+	printf("athread_remote_rank => %d and athread_remote_size => %d\n", athread_remote_rank, athread_remote_size);
 	for (i=0; i < (athread_remote_size-1); i++) {
 		printf("slave #%d == %d and FRESH == %d\n", i+1, slave_status[i], FRESH);
 		if (slave_status[i] == FRESH) {
