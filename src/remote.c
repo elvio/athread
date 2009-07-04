@@ -263,7 +263,9 @@ int athread_remote_send_job(struct job *job) {
 	}
 
 	pthread_mutex_lock(&slave_status_mutex);
+	printf("Updating slave #%d to BUSY status\n", slave);
 	slave_status[slave] = BUSY;
+	printf("slave_status[slave] == %d and BUSY == %d\n", slave_status[slave], BUSY);
 	pthread_mutex_unlock(&slave_status_mutex);
 	
 	// create input to new job
