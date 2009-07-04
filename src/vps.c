@@ -119,6 +119,7 @@ execute_job(struct job *job, struct vp_node *vp)
 	
 	if ( remote_master() && job_has_remote_ability(job) ) {
 		athread_remote_send_job(job);
+		return;
 	}
 	// slaves can't create remote jobs 
 	else if (remote_slave() && job_has_remote_ability(job)) {
