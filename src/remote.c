@@ -6,6 +6,8 @@
 #define MESSAGE_SIZE 3000
 #define MASTER_ID 0
 static pthread_mutex_t slave_status_mutex = PTHREAD_MUTEX_INITIALIZER;
+static pthread_mutex_t available_slave_mutex = PTHREAD_MUTEX_INITIALIZER;
+static pthread_cond_t available_slave_cond = PTHREAD_COND_INITIALIZE;
 
 enum shared_oper {FRESH, BUSY, OKS};	
 enum master_oper {NEW_TASK, NEW_TASK_DATA};
@@ -43,7 +45,7 @@ int get_available_slave() {
 	printf("athread_remote_rank => %d and athread_remote_size => %d\n", athread_remote_rank, athread_remote_size);
 
 	pthread_mutex_lock(&slave_status_mutex);
-	for (i=0; i < (athread_remote_size); i++) {
+	for (i=0; i < (athread_remote_size-1); i++) {
 		printf("slave #%d == %d | FRESH == %d, BUSY == %d\n", i+1, slave_status[i], FRESH, BUSY);
 		if (slave_status[i] == FRESH) {
 			pthread_mutex_unlock(&slave_status_mutex);
@@ -60,11 +62,24 @@ void mark_slave_as_busy(int slave) {
 	printf("RANK(%d) --- Marking slave #%d as BUSY\n", athread_remote_rank, slave);
 	if (slave_status[slave-1] == BUSY) {
 		printf("Trying to mark an already BUSY slave.. It fails\n");
-		exit(1);
 	}
 	slave_status[slave-1] = BUSY;
 	pthread_mutex_unlock(&slave_status_mutex);
 }
+
+void mark_slave_as_fresh(int slave) {
+	pthread_mutex_lock(&slave_status_mutex);
+	printf("RANK(%d) --- Marking slave #%d as FRESH\n", athread_remote_rank, slave);
+	if (slave_status[slave-1] == FRESH) {
+		printf("Trying to mark an already FRESH slave.. It fails\n");
+	}
+	slave_status[slave-1] = FRESH;
+	pthread_mutex_unlock(&slave_status_mutex);
+	
+	printf("Sending signal to slave conditional var\n");
+	pthread_cond_signal(&available_slave_cond);
+}
+
 
 void *athread_remote_slave_wait_master_task(void *in) {
 	int op_buf;
@@ -217,6 +232,7 @@ double request_result_from_slave(int slave) {
 void *athread_remote_master_execute_job(void *in) {
 	int op_buf;
 	int op_rec;
+	int slave;
 	double job_data;
 	double result;
 	MPI_Status *status;
@@ -236,6 +252,24 @@ void *athread_remote_master_execute_job(void *in) {
 		mark job as done
 	*/
 
+	if (remote_job_input->slave == -1) {
+		printf("We have to wait for slave availability...\n");
+		pthread_mutex_lock(&available_slave_mutex);
+		pthread_cond_wait(&available_slave_cond, &available_slave_mutex);
+		slave = get_available_slave();
+		while (slave == -1) {
+			sleep(1);
+			printf("Trying to get a new slave...\n");
+			pthread_mutex_lock(&available_slave_mutex);
+			pthread_cond_wait(&available_slave_cond, &available_slave_mutex);
+			slave = get_available_slave();
+		}
+		
+		printf("got a free slave. Time to use it\n");
+		mark_slave_as_busy(slave);
+		remote_job_input->slave = slave;
+	}
+
 	request_ok_from_slave(remote_job_input->slave);
 	send_service_id_to_slave((job->attribs.remote_job)->service_id, remote_job_input->slave);
 	request_ok_from_slave(remote_job_input->slave);
@@ -245,10 +279,8 @@ void *athread_remote_master_execute_job(void *in) {
 	request_ok_from_slave(remote_job_input->slave);
 	result = request_result_from_slave(remote_job_input->slave);
 	
-	pthread_mutex_lock(&slave_status_mutex);
-	slave_status[remote_job_input->slave] = FRESH;
-	pthread_mutex_unlock(&slave_status_mutex);
-
+	mark_slave_as_fresh(remote_job_input->slave);
+	
 	return (void*) NULL;
 }
 
@@ -269,10 +301,11 @@ int athread_remote_send_job(struct job *job) {
 	slave = get_available_slave();
 	if (slave == -1) {
 		printf("Could not find a available slave to execute remote thread\n");
-		return 1;
 	}
 
-	mark_slave_as_busy(slave);
+	if (slave > 0) {
+		mark_slave_as_busy(slave);
+	}
 	
 	// create input to new job
 	rinput = malloc(sizeof(struct remote_job_input));
