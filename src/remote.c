@@ -44,7 +44,7 @@ int get_available_slave() {
 
 	pthread_mutex_lock(&slave_status_mutex);
 	for (i=0; i < (athread_remote_size-1); i++) {
-		printf("slave #%d == %d and FRESH == %d\n", i+1, slave_status[i], FRESH);
+		printf("slave #%d == %d | FRESH == %d, BUSY == %d\n", i+1, slave_status[i], FRESH, BUSY);
 		if (slave_status[i] == FRESH) {
 			pthread_mutex_unlock(&slave_status_mutex);
 			return i+1;
