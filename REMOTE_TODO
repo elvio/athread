@@ -56,14 +56,9 @@ wait(ok)											send(ok)
 wait(result)
 
 
+----
+1 - Caso não haja slave disponível, criar thread e ficar em modo de espera por um slave
+2 - Fazer computação no slave
+3 - Retornar resultado
+4 - Atualizar valores nas estruturas atuais e status do job como terminado
 
-*** Sexta
-Enviar job completo
-Executar Job
-Atualizar status
-
-
-*** Sábado
-Retornar Resultado
-Atualizar master com resultado
-Fazer join funcionar com remoto
