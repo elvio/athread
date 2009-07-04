@@ -219,7 +219,7 @@ void *athread_remote_master_execute_job(void *in) {
 	*/
 
 	request_ok_from_slave(remote_job_input->slave);
-	send_service_id_to_slave(jobs->attribs->remote_job->service_id, remote_job_input->slave);
+	send_service_id_to_slave(job->attribs->remote_job->service_id, remote_job_input->slave);
 	request_ok_from_slave(remote_job_input->slave);
 	
 	job_data = *(double*) job->data;
