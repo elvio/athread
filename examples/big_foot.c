@@ -44,6 +44,8 @@ int main(int argc, char *argv[]) {
 	athread_create(&remote_thread, &remote_thread_attr, remote_th, (void *) input_value);
 	//athread_join(remote_thread, (void*) result);
 	
+	printf("waiting...");
+	while(1);
 	
 	aTerminate();
 	return 0;
