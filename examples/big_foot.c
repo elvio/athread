@@ -50,10 +50,8 @@ int main(int argc, char *argv[]) {
 	aRemoteInit(argc, argv);
 	aInit(&argc, &argv);
 	
-	
 	// create remote threads and let ir runn.. too..
 	*input_value = 10;
-	
 	
 	// register service
 	athread_remote_register_service(REMOTE_SERVICE_ID, remote_th);
