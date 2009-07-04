@@ -119,7 +119,7 @@ void *athread_remote_slave_execute_job(void *in) {
 		send ok
 		send result
 	*/
-	send_op_to_master()
+	send_op_to_master(OKS);
 	return (void *)NULL;
 }
 
