@@ -97,6 +97,8 @@ void send_op_to_master(int operation) {
 	request ok from slave and abort if it fails
 */
 void request_ok_from_slave(int slave) {
+	int op_rec;
+	
 	printf("Waiting OKS from slave %d\n", slave);
 	op_rec = receive_op_from_slave(slave);
 	printf("Got it\n");
