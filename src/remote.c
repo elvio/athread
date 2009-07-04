@@ -92,7 +92,9 @@ int receive_op_from_master() {
 	Send operation code to MASTER
 */
 void send_op_to_master(int operation) {
+	printf("Slave %d sending op to master\n", athread_remote_rank);
 	MPI_Send(&operation, 1, MPI_INT, MASTER_ID, 0, MPI_COMM_WORLD);
+	printf("slave %d -- Operation sent\n", athread_remote_rank);
 }
 
 /*
@@ -143,8 +145,6 @@ void *athread_remote_master_execute_job(void *in) {
 		**** steps to take ***
 		----------------------
 		recv ok from slave
-		send new task
-		recv ok
 		send task
 		recv ok
 		recv result
@@ -153,16 +153,7 @@ void *athread_remote_master_execute_job(void *in) {
 	*/
 
 	request_ok_from_slave(remote_job_input->slave);
-	
-	printf("Send new task request to slave %d\n", remote_job_input->slave);
-	send_op_to_slave(NEW_TASK, remote_job_input->slave);
-	printf("Sent done. Slave %d got it\n", remote_job_input->slave);
-	
-	request_ok_from_slave(remote_job_input->slave);
-	
-	printf("Sending task to slave %d\n", remote_job_input->slave);
-	printf("Task was sent. Slave %d got it. Waiting result\n", remote_job_input->slave);
-	
+	return (void*) NULL;
 }
 
 int athread_remote_send_job(struct job *job) {
