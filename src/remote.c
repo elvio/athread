@@ -55,6 +55,16 @@ int get_available_slave() {
 	return -1;
 }
 
+void mark_slave_as_busy(int slave) {
+	pthread_mutex_lock(&slave_status_mutex);
+	printf("RANK(%d) --- Marking slave #%d as BUSY\n", athread_remote_rank, slave);
+	if (slave_status[slave-1] == BUSY) {
+		printf("Trying to mark an already BUSY slave.. It fails\n");
+		exit(1);
+	}
+	slave_status[slave-1] = BUSY;
+	pthread_mutex_unlock(&slave_status_mutex);
+}
 
 void *athread_remote_slave_wait_master_task(void *in) {
 	int op_buf;
@@ -262,11 +272,7 @@ int athread_remote_send_job(struct job *job) {
 		return 1;
 	}
 
-	pthread_mutex_lock(&slave_status_mutex);
-	printf("RANK(%d) -- Updating slave #%d to BUSY status\n", athread_remote_rank, slave);
-	slave_status[slave] = BUSY;
-	printf("slave_status[%d] == %d and BUSY == %d\n", slave, slave_status[slave], BUSY);
-	pthread_mutex_unlock(&slave_status_mutex);
+	mark_slave_as_busy(slave);
 	
 	// create input to new job
 	rinput = malloc(sizeof(struct remote_job_input));
