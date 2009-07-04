@@ -5,9 +5,9 @@
 
 #define MESSAGE_SIZE 3000
 #define MASTER_ID 0
-static pthread_mutex_t remote_mutex_slave = PTHREAD_MUTEX_INITIALIZER;
+static pthread_mutex_t slave_status_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-enum shared_oper {FRESH, EXECUTING, OKS};	
+enum shared_oper {FRESH, BUSY, OKS};	
 enum master_oper {NEW_TASK, NEW_TASK_DATA};
 	
 // int athread_remote_size;
@@ -39,13 +39,18 @@ int remote_slave() {
 
 int get_available_slave() {
 	int i;
+
 	printf("athread_remote_rank => %d and athread_remote_size => %d\n", athread_remote_rank, athread_remote_size);
+
+	pthread_mutex_lock(&slave_status_mutex);
 	for (i=0; i < (athread_remote_size-1); i++) {
 		printf("slave #%d == %d and FRESH == %d\n", i+1, slave_status[i], FRESH);
 		if (slave_status[i] == FRESH) {
 			return i+1;
 		}
 	}
+	pthread_mutex_unlock(&slave_status_mutex);
+	
 	return -1;
 }
 
@@ -228,6 +233,10 @@ void *athread_remote_master_execute_job(void *in) {
 	send_service_data_input_to_slave(job_data, remote_job_input->slave);
 	request_ok_from_slave(remote_job_input->slave);
 	result = request_result_from_slave(remote_job_input->slave);
+	
+	pthread_mutex_lock(&slave_status_mutex);
+	slave_status[remote_job_input->slave] = FRESH;
+	pthread_mutex_unlock(&slave_status_mutex);
 
 	return (void*) NULL;
 }
@@ -252,6 +261,10 @@ int athread_remote_send_job(struct job *job) {
 		return 1;
 	}
 
+	pthread_mutex_lock(&slave_status_mutex);
+	slave_status[slave] = BUSY;
+	pthread_mutex_unlock(&slave_status_mutex);
+	
 	// create input to new job
 	rinput = malloc(sizeof(struct remote_job_input));
 	rinput->job = job;
