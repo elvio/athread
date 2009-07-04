@@ -143,13 +143,13 @@ void *athread_remote_master_execute_job(void *in) {
 		mark job as done
 	*/
 
-	request_slave_ok(remote_job_input->slave);
+	request_ok_from_slave(remote_job_input->slave);
 	
 	printf("Send new task request to slave %d\n", remote_job_input->slave);
 	send_op_to_slave(remote_job_input->slave, NEW_TASK);
 	printf("Sent done. Slave %d got it\n", remote_job_input->slave);
 	
-	request_slave_ok(remote_job_input->slave);
+	request_ok_from_slave(remote_job_input->slave);
 	
 	printf("Sending task to slave %d\n", remote_job_input->slave);
 	
