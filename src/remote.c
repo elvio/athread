@@ -176,7 +176,7 @@ void send_service_id_to_slave(int service_id, int slave) {
 }
 
 void send_service_data_input_to_slave(double job_input_data, int slave) {
-	printf("Sending input data(%f) to slave = %d\n", job_input_data, slave);
+	printf("Sending input data --- input data = %2.2f to slave = %d\n", job_input_data, slave);
 	MPI_Send(&job_input_data, 1, MPI_DOUBLE, slave, 0, MPI_COMM_WORLD);
 	printf("Input data sent --- input data = %2.2f to slave = %d\n", job_input_data, slave);
 }
