@@ -12,7 +12,7 @@
 void *remote_th(void *in) {
 	int *result = malloc(sizeof(int));
 	
-	printf("remote_th --- remote_athread_rank == %d\n", remote_athread_rank);
+	printf("remote_th --- athread_remote_rank == %d\n", athread_remote_rank);
 	*result = *(int *) in;
 	*result += 10;
 	
