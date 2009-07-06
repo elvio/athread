@@ -215,6 +215,7 @@ void *athread_remote_slave_execute_job(void *in) {
 	// struct remote_service registred_services[100];
 
 	function = NULL;
+	printf("[s] slave #%d --- registred_serivices_index == %d\n", athread_remote_rank, registred_services_index);
 	for (i=0; i < registred_services_index; i++) {
 		printf("[s] slave #%d --- testing service id %d == %d ? \n", athread_remote_rank, registred_services[i].service_id, service_id);
 		if ((registred_services[i]).service_id == service_id) {
