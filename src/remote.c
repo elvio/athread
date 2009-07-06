@@ -185,6 +185,7 @@ void *athread_remote_slave_execute_job(void *in) {
 	double result;
 	struct remote_service *service;
 	athread_t thread;
+	pfunc function;
 	int i;
 	
 	/*
@@ -217,6 +218,7 @@ void *athread_remote_slave_execute_job(void *in) {
 	for (i=0; i < registred_services_index; i++) {
 		if (registred_services[i].service_id == service_id) {
 			service = &(registred_services[i]);
+			break;
 		}
 	}
 	
@@ -225,11 +227,13 @@ void *athread_remote_slave_execute_job(void *in) {
 		exit(1);
 	}
 	
-	printf("[ss] slave %%d --- found registred service with ID = %d\n", athread_remote_rank, service->service_id);
+	function = registred_services[i].function;
+	function = service->function;
+	printf("[ss] slave #%d --- found registred service with ID = %d\n", athread_remote_rank, service->service_id);
 	printf("found service_id => %d\n", service->service_id);
-	athread_create(&thread, NULL, service->function, (void *) input_data);
+	athread_create(&thread, NULL, function, (void *) input_data);
 	athread_join(thread, (void *) result_p);
-	printf("[ss] slave %%d --- finished computation and joined\n", athread_remote_rank);
+	printf("[ss] slave #%d --- finished computation and joined\n", athread_remote_rank);
 	
 	
 	return (void *) NULL;
