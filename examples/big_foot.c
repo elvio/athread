@@ -23,7 +23,7 @@ void *remote_th(void *in) {
 void *remote_th_2(void *in) {
 	double *result = malloc(sizeof(double));
 	
-	printf("remote_th --- athread_remote_rank == %d\n", athread_remote_rank);
+	printf("remote_th_2 --- athread_remote_rank == %d\n", athread_remote_rank);
 	*result = *(double *) in;
 	*result += 12;
 	
