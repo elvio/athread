@@ -126,9 +126,9 @@ int request_service_id() {
 	int service_id;
 	MPI_Status status;
 
-	printf("slave #%d is requesting service id..\n", athread_remote_rank);
+	printf("[s] slave #%d --- requesting service id..\n", athread_remote_rank);
 	MPI_Recv(&service_id, 1, MPI_INT, MASTER_ID, 0, MPI_COMM_WORLD, &status);
-	printf("slave #%d got service id..\n", athread_remote_rank);
+	printf("[s] slave #%d --- got service id..\n", athread_remote_rank);
 
 	return service_id;
 }
@@ -141,9 +141,9 @@ double request_input_data() {
 	double input_data;
 	MPI_Status status;
 
-	printf("slave #%d is requesting input data..\n", athread_remote_rank);
+	printf("[s] slave #%d --- requesting input data..\n", athread_remote_rank);
 	MPI_Recv(&input_data, 1, MPI_DOUBLE, MASTER_ID, 0, MPI_COMM_WORLD, &status);
-	printf("slave #%d got input data..\n", athread_remote_rank);
+	printf("[s] slave #%d --- input data..\n", athread_remote_rank);
 
 	return input_data;
 }
@@ -152,9 +152,9 @@ double request_input_data() {
 	Send operation code to MASTER
 */
 void send_op_to_master(int operation) {
-	printf("Slave %d sending op to master\n", athread_remote_rank);
+	printf("[s] slave #%d --- sending op to master\n", athread_remote_rank);
 	MPI_Send(&operation, 1, MPI_INT, MASTER_ID, 0, MPI_COMM_WORLD);
-	printf("slave %d -- Operation sent\n", athread_remote_rank);
+	printf("[s] slave #%d -- op sent!\n", athread_remote_rank);
 }
 
 /*
@@ -188,13 +188,18 @@ void *athread_remote_slave_execute_job(void *in) {
 		send result
 	*/
 	send_op_to_master(OKS);
+	
 	service_id = request_service_id();
 	send_op_to_master(OKS);
+	
 	input_data = request_input_data();
 	send_op_to_master(OKS);
-	printf("Time to execute...\n");
+	
 
-	while(1);
+	while(1) {
+		printf("EXECUTE TASK\n");
+		sleep(1);
+	}
 	
 	return (void *)NULL;
 }
