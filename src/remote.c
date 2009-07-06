@@ -208,7 +208,7 @@ void *athread_remote_slave_execute_job(void *in) {
 	
 	// struct remote_service {
 	// 	int service_id;
-	// 	void *(*function)(void *);
+	// 	pfunc function;
 	// };
 	// 
 	// struct remote_service registred_services[100];
