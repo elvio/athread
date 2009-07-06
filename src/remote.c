@@ -368,6 +368,8 @@ int aRemoteInit(int argc, char **argv) {
 	#ifdef DEBUG
 		printf("MPI configuration is done. I guess it was the hard part ;)\n");
 	#endif
+	
+	registered_services_index = 0;
 
 	if (remote_master()) {
 		printf("Starting slave status...\n");
@@ -385,8 +387,6 @@ int aRemoteInit(int argc, char **argv) {
 	#ifdef DEBUG
 		printf("Slave status has been created with no sigfault. We are so lucky today...\n");
 	#endif
-	
-	registered_services_index = 0;
 		
 	return 0;
 }
