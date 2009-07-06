@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
 	
 	
 	while(1) { 
-		printf("waiting...");
+		printf("waiting..\n");
 		sleep(3); 
 	}
 	
