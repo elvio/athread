@@ -68,10 +68,11 @@ int main(int argc, char *argv[]) {
 	athread_create(&remote_thread, &remote_thread_attr, remote_th, (void *) input_value);
 	athread_create(&remote_thread_2, &remote_thread_attr_2, remote_th_2, (void *) input_value);
 	
-	printf("waiting...");
 	
-	
-	while(1);
+	while(1) { 
+		printf("waiting...");
+		sleep(3); 
+	}
 	
 	aTerminate();
 	return 0;
