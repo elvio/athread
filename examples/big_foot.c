@@ -71,7 +71,7 @@ int main(int argc, char *argv[]) {
 	
 	while(1) { 
 		printf("waiting..\n");
-		sleep(3); 
+		sleep(300); 
 	}
 	
 	aTerminate();
