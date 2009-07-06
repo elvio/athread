@@ -213,25 +213,23 @@ void *athread_remote_slave_execute_job(void *in) {
 	// };
 	// 
 	// struct remote_service registred_services[100];
-	
-	service = NULL;
+
+	function = NULL;
 	for (i=0; i < registred_services_index; i++) {
 		if (registred_services[i].service_id == service_id) {
-			service = &(registred_services[i]);
+			function = registred_services[i].function;
 			break;
 		}
 	}
 	
-	if (service == NULL) {
+	if (function == NULL) {
 		printf("[ss] slave #%d --- Couldn't find service using ID = %d\n", athread_remote_rank, service_id);
 		exit(1);
 	}
 	
-	function = registred_services[i].function;
-	function = service->function;
 	printf("[ss] slave #%d --- found registred service with ID = %d\n", athread_remote_rank, service->service_id);
 	printf("found service_id => %d\n", service->service_id);
-	athread_create(&thread, NULL, &function, (void *) input_data);
+	athread_create(&thread, NULL, (pfunc) function, (void *) input_data);
 	athread_join(thread, (void *) result_p);
 	printf("[ss] slave #%d --- finished computation and joined\n", athread_remote_rank);
 	
@@ -390,7 +388,7 @@ int aRemoteInit(int argc, char **argv) {
 }
 
 
-int athread_remote_register_service(int service, void *(*function)(void *)) {
+int athread_remote_register_service(int service, pfunc function) {
 	registred_services[registred_services_index].service_id = service;
 	registred_services[registred_services_index].function = function;
 	registred_services_index+=1;
