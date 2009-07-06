@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <mpi/mpi.h>
+#include "athread.h"
 #include "anahy/structures.h"
 #include "anahy/macros.h"
 
