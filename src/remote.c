@@ -185,6 +185,7 @@ void *athread_remote_slave_execute_job(void *in) {
 	double result;
 	struct remote_service *service;
 	athread_t thread;
+	int i;
 	
 	/*
 		send ok to master
@@ -212,7 +213,19 @@ void *athread_remote_slave_execute_job(void *in) {
 	// 
 	// struct remote_service registred_services[100];
 	
-	service = &(registred_services[service_id]);
+	service = NULL;
+	for (i=0; i < registred_services_index; i++) {
+		if (registred_services[i].service_id == service_id) {
+			service = &(registred_services[i]);
+		}
+	}
+	
+	if (service == NULL) {
+		printf("Couldn't find service using ID = %d\n", service_id);
+		exit(1);
+	}
+	
+	printf("[ss] slave %%d --- found registred service with ID = %d\n", service->service_id);
 	printf("found service_id => %d\n", service->service_id);
 	//athread_create(&thread, NULL, service, (void *) input_data);
 	//athread_join(thread, (void *) result_p);
