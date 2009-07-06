@@ -216,8 +216,8 @@ void *athread_remote_slave_execute_job(void *in) {
 
 	function = NULL;
 	for (i=0; i < registred_services_index; i++) {
-		if (registred_services[i].service_id == service_id) {
-			function = registred_services[i].function;
+		if ((registred_services[i])->service_id == service_id) {
+			function = (registred_services[i])->function;
 			break;
 		}
 	}
