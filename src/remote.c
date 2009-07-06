@@ -233,15 +233,15 @@ void *athread_remote_slave_execute_job(void *in) {
 	}
 	
 	if (function == NULL) {
-		printf("[ss] slave #%d --- Couldn't find service using ID = %d\n", athread_remote_rank, service_id);
+		printf("[s] slave #%d --- Couldn't find service using ID = %d\n", athread_remote_rank, service_id);
 		exit(1);
 	}
 	
-	printf("[ss] slave #%d --- found registered service with ID = %d\n", athread_remote_rank, service->service_id);
+	printf("[s] slave #%d --- found registered service with ID = %d\n", athread_remote_rank, service->service_id);
 	printf("found service_id => %d\n", service->service_id);
 	// athread_create(&thread, NULL, function, (void *) input_data);
 	// athread_join(thread, (void *) result_p);
-	printf("[ss] slave #%d --- finished computation and joined\n", athread_remote_rank);
+	printf("[s] slave #%d --- finished computation and joined\n", athread_remote_rank);
 	athread_remote_sent_result_to_master(10);
 	
 	return (void *) NULL;
@@ -326,6 +326,8 @@ void *athread_remote_master_execute_job(void *in) {
 	send_service_data_input_to_slave(job_data, remote_job_input->slave);
 	request_ok_from_slave(remote_job_input->slave);
 	result = request_result_from_slave(remote_job_input->slave);
+
+	printf("[m] master --- got result from slave #%d --- result == %2.2f\n", remote_job_input->slave, result);
 	
 	mark_slave_as_fresh(remote_job_input->slave);
 	
