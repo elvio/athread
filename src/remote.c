@@ -212,14 +212,14 @@ void *athread_remote_slave_execute_job(void *in) {
 	// 	pfunc function;
 	// };
 	// 
-	// struct remote_service registred_services[100];
+	// struct remote_service registered_services[100];
 
 	function = NULL;
-	printf("[s] slave #%d --- registred_serivices_index == %d\n", athread_remote_rank, registred_services_index);
-	for (i=0; i < registred_services_index; i++) {
-		printf("[s] slave #%d --- testing service id %d == %d ? \n", athread_remote_rank, registred_services[i].service_id, service_id);
-		if ((registred_services[i]).service_id == service_id) {
-			function = (registred_services[i]).function;
+	printf("[s] slave #%d --- registered_serivices_index == %d\n", athread_remote_rank, registered_services_index);
+	for (i=0; i < registered_services_index; i++) {
+		printf("[s] slave #%d --- testing service id %d == %d ? \n", athread_remote_rank, registered_services[i].service_id, service_id);
+		if ((registered_services[i]).service_id == service_id) {
+			function = (registered_services[i]).function;
 			break;
 		}
 	}
@@ -229,7 +229,7 @@ void *athread_remote_slave_execute_job(void *in) {
 		exit(1);
 	}
 	
-	printf("[ss] slave #%d --- found registred service with ID = %d\n", athread_remote_rank, service->service_id);
+	printf("[ss] slave #%d --- found registered service with ID = %d\n", athread_remote_rank, service->service_id);
 	printf("found service_id => %d\n", service->service_id);
 	// athread_create(&thread, NULL, function, (void *) input_data);
 	// athread_join(thread, (void *) result_p);
