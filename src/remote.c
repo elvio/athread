@@ -213,7 +213,7 @@ void *athread_remote_slave_execute_job(void *in) {
 	// struct remote_service registred_services[100];
 	
 	service = registred_services[service_id];
-	athread_create(thread, NULL, service, (void *) input_data);
+	athread_create(&thread, NULL, service, (void *) input_data);
 	athread_join(thread, (void *) result_p);
 	
 	return (void *)NULL;
