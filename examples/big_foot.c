@@ -46,7 +46,6 @@ int main(int argc, char *argv[]) {
 	MPI_Comm_rank(MPI_COMM_WORLD, &athread_remote_rank);  
   MPI_Comm_size(MPI_COMM_WORLD, &athread_remote_size);
 
-	aRemoteInit(argc, argv);
 	aInit(&argc, &argv);
 	
 	// create remote threads and let ir runn.. too..
@@ -56,6 +55,8 @@ int main(int argc, char *argv[]) {
 	athread_remote_register_service(REMOTE_SERVICE_ID, remote_th);
 	athread_remote_register_service(REMOTE_SERVICE_ID_2, remote_th_2);
 	
+	aRemoteInit(argc, argv);
+	
 	athread_attr_init(&remote_thread_attr);
 	athread_attr_set_remote_ability(&remote_thread_attr, 1);
 	athread_attr_set_remote_service(&remote_thread_attr, REMOTE_SERVICE_ID);
@@ -64,11 +65,12 @@ int main(int argc, char *argv[]) {
 	athread_attr_set_remote_ability(&remote_thread_attr_2, 1);
 	athread_attr_set_remote_service(&remote_thread_attr_2, REMOTE_SERVICE_ID_2);
 	
-	
 	athread_create(&remote_thread, &remote_thread_attr, remote_th, (void *) input_value);
 	athread_create(&remote_thread_2, &remote_thread_attr_2, remote_th_2, (void *) input_value);
 	
 	printf("waiting...");
+	
+	
 	while(1);
 	
 	aTerminate();

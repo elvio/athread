@@ -117,6 +117,8 @@ aInit(int *user_argc, char ***user_argv)
 	};
 
 	init_engine();
+	
+	registered_services_index = 0;
 
 	while (2) {
 		int option_index = 0;
@@ -158,6 +160,8 @@ aInit(int *user_argc, char ***user_argv)
 	opterr = _opterr;
 	optopt = _optopt;
 	optarg = _optarg;
+	
+	
 	
 	return 0;
 }
