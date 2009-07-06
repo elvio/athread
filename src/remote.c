@@ -174,6 +174,14 @@ void request_ok_from_slave(int slave) {
 	}
 }
 
+
+void athread_remote_sent_result_to_master(double result) {
+	printf("[s] slave #%d --- send result = %2.2f to master\n", athread_remote_rank, result);
+	MPI_Send(&result, 1, MPI_DOUBLE, MASTER_ID, 0, MPI_COMM_WORLD);
+	printf("[s] slave #%d --- result sent! = %2.2f to master\n", athread_remote_rank, result);
+}
+
+
 /*
 	create a thread to handle slave content
 */
@@ -234,7 +242,7 @@ void *athread_remote_slave_execute_job(void *in) {
 	// athread_create(&thread, NULL, function, (void *) input_data);
 	// athread_join(thread, (void *) result_p);
 	printf("[ss] slave #%d --- finished computation and joined\n", athread_remote_rank);
-	
+	athread_remote_sent_result_to_master(10);
 	
 	return (void *) NULL;
 }
@@ -323,6 +331,7 @@ void *athread_remote_master_execute_job(void *in) {
 	
 	return (void*) NULL;
 }
+
 
 int athread_remote_send_job(struct job *job) {
 	int slave;
