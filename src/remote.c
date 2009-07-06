@@ -358,7 +358,7 @@ int aRemoteInit(int argc, char **argv) {
 		printf("[ss] starting thread...\n");
 		slave_oks = malloc(sizeof(pthread_t));
 		pthread_create(slave_oks, NULL, athread_remote_slave_execute_job, (void*) NULL);
-		pthread_join(slave_oks, (void *)NULL);
+		pthread_join(*slave_oks, (void *) NULL);
 	}
 	
 	#ifdef DEBUG
