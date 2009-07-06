@@ -179,6 +179,12 @@ void request_ok_from_slave(int slave) {
 void *athread_remote_slave_execute_job(void *in) {
 	int service_id;
 	double input_data;
+	double *input_data_p;
+	double *result_p;
+	double result;
+	void *(*service)(void*);
+	athread_t thread;
+	
 	/*
 		send ok to master
 		recv task service_id
@@ -195,11 +201,19 @@ void *athread_remote_slave_execute_job(void *in) {
 	input_data = request_input_data();
 	send_op_to_master(OKS);
 	
-
-	while(1) {
-		printf("EXECUTE TASK\n");
-		sleep(1);
-	}
+	input_data_p = malloc(sizeof(double));
+	*input_data_p = input_data;
+	
+	// struct remote_service {
+	// 	int service_id;
+	// 	void *(*function)(void *);
+	// };
+	// 
+	// struct remote_service registred_services[100];
+	
+	service = registred_services[service_id];
+	athread_create(thread, NULL, service, (void *) input_data);
+	athread_join(thread, (void *) result_p);
 	
 	return (void *)NULL;
 }
