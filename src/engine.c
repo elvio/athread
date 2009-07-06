@@ -159,8 +159,5 @@ aInit(int *user_argc, char ***user_argv)
 	optopt = _optopt;
 	optarg = _optarg;
 	
-	// remote services
-	registred_services_index = 0;
-	
 	return 0;
 }

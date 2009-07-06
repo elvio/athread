@@ -385,6 +385,8 @@ int aRemoteInit(int argc, char **argv) {
 	#ifdef DEBUG
 		printf("Slave status has been created with no sigfault. We are so lucky today...\n");
 	#endif
+	
+	registred_services_index = 0;
 		
 	return 0;
 }
@@ -393,5 +395,5 @@ int aRemoteInit(int argc, char **argv) {
 int athread_remote_register_service(int service, pfunc function) {
 	registred_services[registred_services_index].service_id = service;
 	registred_services[registred_services_index].function = function;
-	registred_services_index+=1;
+	registred_services_index++;
 }
