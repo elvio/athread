@@ -246,9 +246,8 @@ struct remote_service {
 	pfunc function;
 };
 
-int registred_services_index;
-struct remote_service registred_services[100];
-
+int registered_services_index;
+struct remote_service registered_services[100];
 
 int athread_remote_size;
 int athread_remote_rank;
