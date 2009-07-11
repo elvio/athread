@@ -265,7 +265,7 @@ void *athread_remote_slave_execute_job(void *in) {
 	athread_remote_sent_result_to_master(result);
 
 	printf("[s] slave #%d --- starting process again --- goto ---\n", athread_remote_rank);
-	goto slave_init;
+	goto init_slave;
 	
 	return (void *) NULL;
 }
