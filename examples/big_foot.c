@@ -70,9 +70,6 @@ int main(int argc, char *argv[]) {
 	athread_join(remote_thread, (void*) result);
 	//athread_join(remote_thread_2, (void*) result);
 	
-
-	while(1) sleep(1);
-	
 	aTerminate();
 	return 0;
 }
