@@ -6,6 +6,8 @@
 
 #define MESSAGE_SIZE 3000
 #define MASTER_ID 0
+#define ARAKIRI 666
+
 static pthread_mutex_t slave_status_mutex = PTHREAD_MUTEX_INITIALIZER;
 static pthread_mutex_t available_slave_mutex = PTHREAD_MUTEX_INITIALIZER;
 static pthread_cond_t available_slave_cond = PTHREAD_COND_INITIALIZER;
@@ -228,6 +230,11 @@ void *athread_remote_slave_execute_job(void *in) {
 	service_id = request_service_id();
 	send_op_to_master(OKS);
 	
+	if (service_id == ARAKIRI) {
+		printf("[s] slave #%d --- ARAKIRI --- time goes by so slowly..\n");
+		return;
+	}
+	
 	input_data = request_input_data();
 	send_op_to_master(OKS);
 	
@@ -426,4 +433,12 @@ int athread_remote_register_service(int service, pfunc function) {
 	registered_services[registered_services_index].function = function;
 	registered_services_index++;
 	printf("service registered. index == %d\n", registered_services_index);
+}
+
+// send arakiri signal to all slaves
+void aRemoteTerminate() {
+	int i;
+	for (i=0; i < athread_remote_size; i++) {
+		send_op_to_slave(ARAKIRI, i);
+	}
 }
