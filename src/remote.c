@@ -295,9 +295,6 @@ void *athread_remote_master_execute_job(void *in) {
 		recv ok
 		send task data input
 		recv ok
-		recv result
-		update status
-		mark job as done
 	*/
 
 	if (remote_job_input->slave == -1) {
@@ -317,6 +314,9 @@ void *athread_remote_master_execute_job(void *in) {
 		mark_slave_as_busy(slave);
 		remote_job_input->slave = slave;
 	}
+	
+	// add to remote_job struct the slave that owner task
+	(job->attribs.remote_job)->slave = remote_job_input->slave;
 
 	request_ok_from_slave(remote_job_input->slave);
 	send_service_id_to_slave((job->attribs.remote_job)->service_id, remote_job_input->slave);
@@ -325,12 +325,9 @@ void *athread_remote_master_execute_job(void *in) {
 	job_data = *(double*) job->data;
 	send_service_data_input_to_slave(job_data, remote_job_input->slave);
 	request_ok_from_slave(remote_job_input->slave);
-	result = request_result_from_slave(remote_job_input->slave);
+	
+	printf("[m] master --- got last ok from slave. Time to go away...\n");
 
-	printf("[m] master --- got result from slave #%d --- result == %2.2f\n", remote_job_input->slave, result);
-	
-	mark_slave_as_fresh(remote_job_input->slave);
-	
 	return (void*) NULL;
 }
 
