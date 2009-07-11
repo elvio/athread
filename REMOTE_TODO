@@ -62,3 +62,8 @@ wait(result)
 3 - Retornar resultado
 4 - Atualizar valores nas estruturas atuais e status do job como terminado
 
+athread_create do remote soh envia dado pro slave e termina a thread
+athread_join do slave faz requizicao do slave e depois marca slave como free
+
+Colodar recv do result no athread_join
+

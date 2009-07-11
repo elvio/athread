@@ -81,6 +81,7 @@ struct remote_job {
 	size_t data_size;
 	int service_id;
 	int return_data_type;
+	int slave;
 	size_t return_data_size;
 	pthread_mutex_t lock;
 };
@@ -254,6 +255,7 @@ int athread_remote_rank;
 
 int remote_master();
 int remote_slave();
+double request_result_from_slave(int slave);
 
 
 pthread_t singer_th;
