@@ -47,6 +47,7 @@ int main(int argc, char *argv[]) {
   MPI_Comm_size(MPI_COMM_WORLD, &athread_remote_size);
 
 	aInit(&argc, &argv);
+	aRemoteInit(argc, argv);
 	
 	// create remote threads and let ir runn.. too..
 	*input_value = 10;
@@ -55,8 +56,6 @@ int main(int argc, char *argv[]) {
 		// register service
 		athread_remote_register_service(REMOTE_SERVICE_ID, remote_th);
 		//athread_remote_register_service(REMOTE_SERVICE_ID_2, remote_th_2);
-	
-		aRemoteInit(argc, argv);
 	
 		athread_attr_init(&remote_thread_attr);
 		athread_attr_set_remote_ability(&remote_thread_attr, 1);
