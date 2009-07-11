@@ -257,6 +257,7 @@ int athread_remote_send_job(struct job *job);
 int remote_master();
 int remote_slave();
 double request_result_from_slave(int slave);
+void mark_slave_as_fresh(int slave);
 
 
 pthread_t singer_th;
