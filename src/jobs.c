@@ -354,6 +354,7 @@ int athread_join(athread_t id, void **return_data)
 	struct vp_node *vp;
 	struct job *stacked_job;
 	struct job *job;
+	int result;
 	pthread_t vp_id;
 	int count, nt;
 	pthread_mutex_t *mutex;

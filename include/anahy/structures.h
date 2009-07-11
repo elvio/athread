@@ -253,6 +253,7 @@ struct remote_service registered_services[100];
 int athread_remote_size;
 int athread_remote_rank;
 
+int athread_remote_send_job(struct job *job);
 int remote_master();
 int remote_slave();
 double request_result_from_slave(int slave);
