@@ -73,6 +73,8 @@ int main(int argc, char *argv[]) {
 	}
 	
 	printf("[ALOHHA] - Alohha before terminate from rank == %d\n", athread_remote_rank);
+	aRemoteTerminate();
+	
 	aTerminate();
 	return 0;
 }
