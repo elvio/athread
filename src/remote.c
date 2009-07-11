@@ -77,8 +77,8 @@ void mark_slave_as_fresh(int slave) {
 	slave_status[slave-1] = FRESH;
 	pthread_mutex_unlock(&slave_status_mutex);
 	
-	printf("Sending signal to slave conditional var\n");
-	pthread_cond_signal(&available_slave_cond);
+	// printf("Sending signal to slave conditional var\n");
+	// pthread_cond_signal(&available_slave_cond);
 }
 
 
