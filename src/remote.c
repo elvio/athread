@@ -182,6 +182,21 @@ void athread_remote_sent_result_to_master(double result) {
 }
 
 
+void ensure_master_got_task() {
+	MPI_Status status;
+	int op_rec;
+	
+	printf("ensuring master got task\n");
+	MPI_Recv(&op_rec, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
+	printf("ok --- master got the fucking task... Going to arakiri :(\n");
+	
+	if (op_rec != OKS) {
+		printf("[error] We ensured master got task, but It answered with something different from OKS\n");
+	}
+}
+
+
+
 /*
 	create a thread to handle slave content
 */
@@ -244,6 +259,8 @@ void *athread_remote_slave_execute_job(void *in) {
 	printf("[s] slave #%d --- finished computation and joined\n", athread_remote_rank);
 	result = 10;
 	athread_remote_sent_result_to_master(result);
+	
+	ensure_master_got_task();
 	
 	return (void *) NULL;
 }
