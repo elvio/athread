@@ -391,7 +391,7 @@ int athread_join(athread_t id, void **return_data)
 			printf("[m] master --- got a join call. Time to request some data hun?\n");
 			*result = request_result_from_slave((job->attribs.remote_job)->slave);
 			printf("[m] master --- got result from slave #%d --- result == %2.2f\n", (job->attribs.remote_job)->slave, *result);
-			mark_slave_as_fresh((job->attribs.remote_job)->slave);
+			//mark_slave_as_fresh((job->attribs.remote_job)->slave);
 			job->status = JOB_JOINED;
 			*return_data = result;
 			return 0;
