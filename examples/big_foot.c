@@ -52,11 +52,12 @@ int main(int argc, char *argv[]) {
 	// create remote threads and let ir runn.. too..
 	*input_value = 10;
 	
-	if (athread_remote_rank == 0) {
-		// register service
-		athread_remote_register_service(REMOTE_SERVICE_ID, remote_th);
-		//athread_remote_register_service(REMOTE_SERVICE_ID_2, remote_th_2);
+	// register service
+	athread_remote_register_service(REMOTE_SERVICE_ID, remote_th);
+	//athread_remote_register_service(REMOTE_SERVICE_ID_2, remote_th_2);
 	
+	
+	if (athread_remote_rank == 0) {
 		athread_attr_init(&remote_thread_attr);
 		athread_attr_set_remote_ability(&remote_thread_attr, 1);
 		athread_attr_set_remote_service(&remote_thread_attr, REMOTE_SERVICE_ID);
