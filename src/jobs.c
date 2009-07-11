@@ -354,7 +354,7 @@ int athread_join(athread_t id, void **return_data)
 	struct vp_node *vp;
 	struct job *stacked_job;
 	struct job *job;
-	double result;
+	double *result;
 	pthread_t vp_id;
 	int count, nt;
 	pthread_mutex_t *mutex;
@@ -385,10 +385,10 @@ int athread_join(athread_t id, void **return_data)
 		
 		// Wow.. what about join a remote job Beavis?
 		if (athread_remote_rank == 0 && job->attribs.remote_job) {
+			result = malloc(sizeof(double));
 			printf("[s] slave --- got a join call. Time to request some data hun?\n");
-			
-			result = request_result_from_slave((job->attribs.remote_job)->slave);
-			printf("[m] master --- got result from slave #%d --- result == %2.2f\n", (job->attribs.remote_job)->slave, result);
+			*result = request_result_from_slave((job->attribs.remote_job)->slave);
+			printf("[m] master --- got result from slave #%d --- result == %2.2f\n", (job->attribs.remote_job)->slave, *result);
 			mark_slave_as_fresh((job->attribs.remote_job)->slave);
 			return 0;
 		}
