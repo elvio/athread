@@ -106,6 +106,7 @@ struct job_attributes {
 	long output_len;
 	
 	/** Informacao para gerenciar threads remotas */
+	int ignore;
 	struct remote_job *remote_job;
 	
  	int n_threads;

@@ -211,9 +211,11 @@ int athread_create(athread_t *id, athread_attr_t *attribs, pfunc function, void 
 	int i, nt;
 
 	if (athread_remote_rank != 0 && attribs && attribs->remote_job) {
+		// mark to engine ignore this task if slave try to execute
+		attribs->ignore = 1;
 		printf("preventing slave to create a remote job\n");
 		return 0;
-	}
+	} 
 	
 	if ((!attribs) || (attribs->splitfactor <= 0)) nt = 0;
 	else nt = attribs->splitfactor - 1;
@@ -391,7 +393,12 @@ int athread_join(athread_t id, void **return_data)
 			*result = request_result_from_slave((job->attribs.remote_job)->slave);
 			printf("[m] master --- got result from slave #%d --- result == %2.2f\n", (job->attribs.remote_job)->slave, *result);
 			mark_slave_as_fresh((job->attribs.remote_job)->slave);
+			job->status = JOB_JOINED;
 			pthread_mutex_unlock(job->job_list.mutex);
+			*return_data = result;
+			return 0;
+		} else if (job->attribs.ignore == 1) {
+			printf("[s] slave --- ** ignoring join **\n");
 			return 0;
 		}
 
