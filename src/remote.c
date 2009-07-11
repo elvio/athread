@@ -283,7 +283,7 @@ double request_result_from_slave(int slave) {
 	double result;
 	
 	printf("Requesting result from slave #%d\n", slave);
-	MPI_Recv(&result, 1, MPI_DOUBLE, MASTER_ID, 0, MPI_COMM_WORLD, &status);
+	MPI_Recv(&result, 1, MPI_DOUBLE, slave, 0, MPI_COMM_WORLD, &status);
 	printf("Got result from slave #%d. Time to finish\n", slave);
 	
 	return result;
