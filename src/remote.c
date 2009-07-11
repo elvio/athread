@@ -260,7 +260,7 @@ void *athread_remote_slave_execute_job(void *in) {
 	result = 10;
 	athread_remote_sent_result_to_master(result);
 	
-	ensure_master_got_task();
+	//ensure_master_got_task();
 	
 	return (void *) NULL;
 }
