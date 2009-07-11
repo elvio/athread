@@ -436,7 +436,7 @@ int athread_remote_register_service(int service, pfunc function) {
 }
 
 // send arakiri signal to all slaves
-void aRemoteTerminate() {
+int aRemoteTerminate() {
 	int i;
 	for (i=0; i < athread_remote_size; i++) {
 		send_op_to_slave(ARAKIRI, i);
