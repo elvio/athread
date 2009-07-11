@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
 	
 	// register service
 	athread_remote_register_service(REMOTE_SERVICE_ID, remote_th);
-	//athread_remote_register_service(REMOTE_SERVICE_ID_2, remote_th_2);
+	athread_remote_register_service(REMOTE_SERVICE_ID_2, remote_th_2);
 
 	aRemoteInit(argc, argv);
 	
@@ -62,14 +62,14 @@ int main(int argc, char *argv[]) {
 		athread_attr_set_remote_ability(&remote_thread_attr, 1);
 		athread_attr_set_remote_service(&remote_thread_attr, REMOTE_SERVICE_ID);
 	
-		// athread_attr_init(&remote_thread_attr_2);
-		// athread_attr_set_remote_ability(&remote_thread_attr_2, 1);
-		// athread_attr_set_remote_service(&remote_thread_attr_2, REMOTE_SERVICE_ID_2);
+		athread_attr_init(&remote_thread_attr_2);
+		athread_attr_set_remote_ability(&remote_thread_attr_2, 1);
+		athread_attr_set_remote_service(&remote_thread_attr_2, REMOTE_SERVICE_ID_2);
 	
 		athread_create(&remote_thread, &remote_thread_attr, remote_th, (void *) input_value);
-		//athread_create(&remote_thread_2, &remote_thread_attr_2, remote_th_2, (void *) input_value);
+		athread_create(&remote_thread_2, &remote_thread_attr_2, remote_th_2, (void *) input_value);
 		athread_join(remote_thread, (void*) result);
-		//athread_join(remote_thread_2, (void*) result);
+		athread_join(remote_thread_2, (void*) result);
 	}
 	
 	printf("[ALOHHA] - Alohha before terminate from rank == %d\n", athread_remote_rank);
