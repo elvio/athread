@@ -57,6 +57,7 @@ int athread_attr_init(athread_attr_t *attr)
 	attr->split = NULL;
 	attr->merge = NULL;
 	attr->remote_job = NULL;
+	attr->ignore = 0;
 	return 0;
 }
 
