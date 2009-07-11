@@ -242,7 +242,7 @@ void *athread_remote_slave_execute_job(void *in) {
 	// athread_create(&thread, NULL, function, (void *) input_data);
 	// athread_join(thread, (void *) result_p);
 	printf("[s] slave #%d --- finished computation and joined\n", athread_remote_rank);
-	double result = 10;
+	result = 10;
 	athread_remote_sent_result_to_master(result);
 	
 	return (void *) NULL;
