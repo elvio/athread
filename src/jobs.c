@@ -397,7 +397,7 @@ int athread_join(athread_t id, void **return_data)
 			pthread_mutex_unlock(job->job_list.mutex);
 			*return_data = result;
 			return 0;
-		} else if (job->attribs.ignore == 1) {
+		} else if (athread_remote_rank != 0) {
 			printf("[s] slave --- ** ignoring join **\n");
 			return 0;
 		}
