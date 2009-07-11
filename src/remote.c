@@ -219,6 +219,10 @@ void *athread_remote_slave_execute_job(void *in) {
 		send ok
 		send result
 	*/
+	
+	// that's a cray jump and i really enjoy using it
+	init_slave:
+	
 	send_op_to_master(OKS);
 	
 	service_id = request_service_id();
@@ -259,8 +263,9 @@ void *athread_remote_slave_execute_job(void *in) {
 	printf("[s] slave #%d --- finished computation and joined\n", athread_remote_rank);
 	result = 10;
 	athread_remote_sent_result_to_master(result);
-	
-	//ensure_master_got_task();
+
+	printf("[s] slave #%d --- starting process again --- goto ---\n", athread_remote_rank);
+	goto slave_init;
 	
 	return (void *) NULL;
 }
