@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
 	
 	
 	double *input_value = malloc(sizeof(double));
-	double *result;
+	double *result = malloc(sizeof(double));
 	
 	MPI_Init(&argc, &argv);
 	MPI_Comm_rank(MPI_COMM_WORLD, &athread_remote_rank);  
@@ -81,7 +81,10 @@ int main(int argc, char *argv[]) {
 		athread_create(&remote_thread, &remote_thread_attr, remote_th, (void *) input_value);
 		athread_create(&remote_thread_2, &remote_thread_attr_2, remote_th_2, (void *) input_value);
 		athread_join(remote_thread, (void*) result);
+		printf("Depois do join 1 = %2.2f\n", *result);
+		
 		athread_join(remote_thread_2, (void*) result);
+		printf("Depois do join 2 = %2.2f\n", *result);
 	}
 	
 	printf("[ALOHHA] - Alohha before terminate from rank == %d\n", athread_remote_rank);

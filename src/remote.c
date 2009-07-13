@@ -210,7 +210,7 @@ void *athread_remote_slave_execute_job(void *in) {
 	double result;
 	struct remote_service *service;
 	athread_t thread;
-	pfunc *function;
+	athread_attr_t remote_attr;
 	int i;
 	
 	/*
@@ -232,7 +232,7 @@ void *athread_remote_slave_execute_job(void *in) {
 	
 	if (service_id == ARAKIRI) {
 		printf("[s] slave #%d --- ARAKIRI --- time goes by so slowly..\n");
-		return;
+		exit(0);
 	}
 	
 	input_data = request_input_data();
@@ -241,12 +241,6 @@ void *athread_remote_slave_execute_job(void *in) {
 	input_data_p = malloc(sizeof(double));
 	*input_data_p = input_data;
 	
-	// struct remote_service {
-	// 	int service_id;
-	// 	pfunc function;
-	// };
-	// 
-	// struct remote_service registered_services[100];
 
 	function = NULL;
 	printf("[s] slave #%d --- registered_serivices_index == %d\n", athread_remote_rank, registered_services_index);
@@ -260,16 +254,20 @@ void *athread_remote_slave_execute_job(void *in) {
 	
 	if (function == NULL) {
 		printf("[s] slave #%d --- Couldn't find service using ID = %d\n", athread_remote_rank, service_id);
-		exit(1);
+		exit(0);
 	}
 	
 	printf("[s] slave #%d --- found registered service with ID = %d\n", athread_remote_rank, service->service_id);
 	printf("found service_id => %d\n", service->service_id);
-	athread_create(&thread, NULL, *function, (void *) input_data);
+	athread_create(&thread, &remote_attr, function, (void *) input_data_p);
 	athread_join(thread, (void *) result_p);
 	printf("[s] slave #%d --- finished computation and joined\n", athread_remote_rank);
-	result = 10;
+
+	result = *(double *) result_p;
 	athread_remote_sent_result_to_master(result);
+	
+	free(result_p);
+	free(input_data_p);
 
 	printf("[s] slave #%d --- starting process again --- goto ---\n", athread_remote_rank);
 	goto init_slave;
