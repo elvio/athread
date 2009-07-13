@@ -13,7 +13,12 @@
 
 void *remote_th(void *in) {
 	printf("inside 1\n");
-	return (void *) NULL;
+	double *result;
+	
+	result = malloc(sizeof(double));
+	*result = *(double *) in;
+	*result += 15;
+	return (void *) result;
 }
 
 void *remote_th_2(void *in) {
