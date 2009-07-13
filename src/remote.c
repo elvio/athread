@@ -210,7 +210,6 @@ void *athread_remote_slave_execute_job(void *in) {
 	double result;
 	struct remote_service *service;
 	athread_t thread;
-	athread_attr_t remote_attr;
 	int i;
 	pfunc function;
 	
@@ -250,7 +249,7 @@ void *athread_remote_slave_execute_job(void *in) {
 		printf("[s] slave #%d --- testing service id %d == %d ? \n", athread_remote_rank, registered_services[i].service_id, service_id);
 		if ((registered_services[i]).service_id == service_id) {
 			service = &(registered_services[i]);
-			function = (registered_services[i]).function;
+			function = &(registered_services[i]).function;
 			break;
 		}
 	}
