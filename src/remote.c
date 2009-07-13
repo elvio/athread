@@ -268,8 +268,8 @@ void *athread_remote_slave_execute_job(void *in) {
 	result = *(double *) result_p;
 	athread_remote_sent_result_to_master(result);
 	
-	free(result_p);
-	free(input_data_p);
+	// free(result_p);
+	// free(input_data_p);
 
 	printf("[s] slave #%d --- starting process again --- goto ---\n", athread_remote_rank);
 	goto init_slave;
