@@ -271,6 +271,8 @@ int athread_create(athread_t *id, athread_attr_t *attribs, pfunc function, void 
 		init_list_head(&job->child_list, 1);
 		printf("-- creating athread -- mutex are ok\n");
 
+		printf("attribs == %p\n", attribs);
+		
 		if (attribs->remote_job) {
 			printf("-- creating athread -- remote job\n");
 			job->status = JOB_ASSIGNED;
