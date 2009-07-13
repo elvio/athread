@@ -248,6 +248,7 @@ void *athread_remote_slave_execute_job(void *in) {
 	for (i=0; i < registered_services_index; i++) {
 		printf("[s] slave #%d --- testing service id %d == %d ? \n", athread_remote_rank, registered_services[i].service_id, service_id);
 		if ((registered_services[i]).service_id == service_id) {
+			service = registered_services[i];
 			function = (registered_services[i]).function;
 			break;
 		}
