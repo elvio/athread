@@ -197,7 +197,9 @@ void ensure_master_got_task() {
 	}
 }
 
-
+void *some_service(void *in) {
+	printf("################## Alloha from some_service ######################\n");
+}
 
 /*
 	create a thread to handle slave content
@@ -260,8 +262,10 @@ void *athread_remote_slave_execute_job(void *in) {
 	}
 	
 	printf("[s] slave #%d --- found registered service with ID = %d\n", athread_remote_rank, service->service_id);
-	printf("found service_id => %d\n", service->service_id);
-	athread_create(&thread, (void *) NULL, *function, (void *) input_data_p);
+	//athread_create(&thread, (void *) NULL, &function, (void *) input_data_p);
+	printf("before create --- \n");
+	athread_create(&thread, (void *) NULL, some_service, (void *) NULL);
+	printf("after create --- \n");
 	athread_join(thread, (void *) result_p);
 	printf("[s] slave #%d --- finished computation and joined\n", athread_remote_rank);
 
