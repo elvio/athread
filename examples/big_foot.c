@@ -14,6 +14,7 @@
 void *remote_th(void *in) {
 	double sresult;
 	double *result;
+	int i, j;
 
 	sresult = *(double *) in;
 	printf("inside 1 --- input = %2.2f\n", sresult);
@@ -21,6 +22,10 @@ void *remote_th(void *in) {
 	
 	result = malloc(sizeof(double));
 	*result = sresult + 15;
+	
+	for (i=0; i<MAXY; i++)
+		for (j=0; j<MAXY; j++)
+			printf("i = %d, j = %d\n", i, j);
 	
 	printf("result fintal == %2.2f\n", *result);
 	return (void *) result;
