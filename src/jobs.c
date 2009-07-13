@@ -394,7 +394,7 @@ int athread_join(athread_t id, void **return_data)
 			mark_slave_as_fresh((job->attribs.remote_job)->slave);
 			job->status = JOB_JOINED;
 			if (return_data) {
-				*return_data = (void *) result;
+				//*return_data = (void *) result;
 			} else {
 				printf("found return_data == NULL\n");
 			}
