@@ -360,6 +360,7 @@ void remove_from_list(struct job *job)
 	free(job);
 	//pthread_mutex_unlock(mutex);
 }
+
 /** Função que sincroniza com uma tarefa.
 @param id descritor da tarefa com a qual se quer sincronizar.
 @param **return_data ponteiro para onde o resultado obtido será armazenado */
@@ -496,6 +497,111 @@ int athread_join(athread_t id, void **return_data)
 	
 	return 0;
 }
+
+
+/** Função que sincroniza com uma tarefa.
+@param id descritor da tarefa com a qual se quer sincronizar.
+**/
+double athread_join_double(athread_t id)
+{
+	struct vp_node *vp;
+	struct job *stacked_job;
+	struct job *job;
+	double *result;
+	pthread_t vp_id;
+	int count, nt;
+	pthread_mutex_t *mutex;
+  pthread_mutex_t merge_lock = PTHREAD_MUTEX_INITIALIZER;
+
+	count = 0;
+	do {
+		job = NULL;
+
+		vp = current_vp();
+		if (! vp) {
+			vp_id = pthread_self();
+		} else {
+			vp_id = vp->id;
+		}
+
+		stacked_job = current_job(vp);
+		if ((stacked_job != NULL) && (vp != NULL))
+			job = search_jobs(MATCH_JOB_ID, &stacked_job->child_list, &id, &vp_id);
+
+		if (job == NULL)
+			job = search_jobs(MATCH_JOB_ID, &engine.job_list, &id, &vp_id);
+
+		if ( job == NULL) {
+			fprintf(stderr, "could not find job %lld on the job list\n", id);
+			return -ESRCH;
+		}
+		
+		// Wow.. what about join a remote job Beavis?
+		if (athread_remote_rank == 0 && job->attribs.remote_job) {
+			result = malloc(sizeof(double));
+			printf("[m] master --- got a join call. Time to request some data hun?\n");
+			*result = request_result_from_slave((job->attribs.remote_job)->slave);
+			printf("[m] master --- got result from slave #%d --- result == %2.2f\n", (job->attribs.remote_job)->slave, *result);
+			mark_slave_as_fresh((job->attribs.remote_job)->slave);
+			job->status = JOB_JOINED;
+			if (return_data) {
+				//*return_data = (void *) result;
+			} else {
+				printf("found return_data == NULL\n");
+			}
+			// *return_data = result;
+			return 0;
+		} else if (athread_remote_rank != 0 && job->attribs.ignore) {
+			printf("[s] slave --- ** ignoring join **\n");
+			return 0;
+		}
+
+		Pthread_mutex_lock(job->job_list.mutex);
+		switch (job->status) {
+			case JOB_UNASSIGNED:
+				job->status = JOB_ASSIGNED;
+				job->owner = vp_id;
+				pthread_mutex_unlock(job->job_list.mutex);
+				execute_job(job, vp);
+				break;
+			case JOB_ASSIGNED:
+				pthread_mutex_unlock(job->job_list.mutex);
+				if (job->owner == vp_id) {
+					execute_job(job, vp);
+					break;
+				}
+			case JOB_EXECUTING:
+				pthread_mutex_unlock(job->job_list.mutex);
+				help_to_execute(job, vp);
+				wait_job_execution(job);
+				break;
+			case JOB_DONE:
+				pthread_mutex_unlock(job->job_list.mutex);
+				break;
+			case JOB_JOINED:
+				pthread_mutex_unlock(job->job_list.mutex);
+				break;
+			default:
+				pthread_mutex_unlock(job->job_list.mutex);
+		}
+
+		Pthread_mutex_lock(job->job_list.mutex);
+
+		if (job->attribs.max_joins == 0 && remove_job) {
+			remove_from_list(job);
+		}
+		
+		double test = *(double *) job->retval;
+    printf("Retornando job->retval === %2.2f\n", test);
+		pthread_mutex_unlock(mutex);
+    return job->retval;
+		count++;
+	} while (count < nt);
+
+	return 0;
+}
+
+
 
 /* ------- */
 /** Função que busca o resultado de uma tarefa.

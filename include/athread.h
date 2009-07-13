@@ -37,6 +37,7 @@ void aSearchFrom(int algorithm);
 /* basic thread handling functions */
 int athread_create(athread_t *id, athread_attr_t *attribs, pfunc function, void *data);
 int athread_join(athread_t id, void **return_data);
+double athread_join_double(athread_t id);
 #define athread_exit(data) return((void *)data)
 athread_t athread_self();
 
