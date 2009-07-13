@@ -21,6 +21,8 @@ void *remote_th(void *in) {
 	
 	result = malloc(sizeof(double));
 	*result = sresult + 15;
+	
+	printf("result fintal == %2.2f\n", *result);
 	return (void *) result;
 }
 
