@@ -491,6 +491,9 @@ int athread_join(athread_t id, void **return_data)
 
 	} while (count < nt);
 	
+	double test2 = *(double *) job->retval;
+  printf("Before return 0 === %2.2f\n", test2);
+	
 	return 0;
 }
 
