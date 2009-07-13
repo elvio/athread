@@ -242,8 +242,6 @@ void *athread_remote_slave_execute_job(void *in) {
 	input_data_p = malloc(sizeof(double));
 	*input_data_p = input_data;
 	
-	result_p = malloc(sizeof(double));
-
 	function = NULL;
 	printf("[s] slave #%d --- registered_serivices_index == %d\n", athread_remote_rank, registered_services_index);
 	for (i=0; i < registered_services_index; i++) {
