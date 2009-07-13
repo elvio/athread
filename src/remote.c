@@ -249,7 +249,7 @@ void *athread_remote_slave_execute_job(void *in) {
 		printf("[s] slave #%d --- testing service id %d == %d ? \n", athread_remote_rank, registered_services[i].service_id, service_id);
 		if ((registered_services[i]).service_id == service_id) {
 			service = &(registered_services[i]);
-			function = &(registered_services[i]).function;
+			function = (registered_services[i]).function;
 			break;
 		}
 	}
@@ -261,7 +261,7 @@ void *athread_remote_slave_execute_job(void *in) {
 	
 	printf("[s] slave #%d --- found registered service with ID = %d\n", athread_remote_rank, service->service_id);
 	printf("found service_id => %d\n", service->service_id);
-	athread_create(&thread, (void *) NULL, function, (void *) input_data_p);
+	athread_create(&thread, (void *) NULL, *function, (void *) input_data_p);
 	athread_join(thread, (void *) result_p);
 	printf("[s] slave #%d --- finished computation and joined\n", athread_remote_rank);
 
