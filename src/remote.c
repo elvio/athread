@@ -266,6 +266,7 @@ void *athread_remote_slave_execute_job(void *in) {
 	printf("[s] slave #%d --- finished computation and joined\n", athread_remote_rank);
 
 	result = *(double *) result_p;
+	printf("start sending result...\n");
 	athread_remote_sent_result_to_master(result);
 	
 	// free(result_p);
