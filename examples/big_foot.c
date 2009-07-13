@@ -24,8 +24,7 @@ void *remote_th(void *in) {
 	*result = sresult + 15;
 	
 	for (i=0; i<MAXY; i++)
-		for (j=0; j<MAXY; j++)
-			printf("i = %d, j = %d\n", i, j);
+		for (j=0; j<MAXY; j++);
 	
 	printf("result fintal (1) == %2.2f\n", *result);
 	return (void *) result;
@@ -44,8 +43,7 @@ void *remote_th_2(void *in) {
 	*result = sresult + 17;
 	
 	for (i=0; i<MAXY; i++)
-		for (j=0; j<MAXY; j++)
-			printf("i = %d, j = %d\n", i, j);
+		for (j=0; j<MAXY; j++);
 	
 	printf("result fintal (2) == %2.2f\n", *result);
 	return (void *) result;
