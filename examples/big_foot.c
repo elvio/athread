@@ -27,13 +27,28 @@ void *remote_th(void *in) {
 		for (j=0; j<MAXY; j++)
 			printf("i = %d, j = %d\n", i, j);
 	
-	printf("result fintal == %2.2f\n", *result);
+	printf("result fintal (1) == %2.2f\n", *result);
 	return (void *) result;
 }
 
 void *remote_th_2(void *in) {
-	printf("inside 2\n");
-	return (void *) NULL;
+	double sresult;
+	double *result;
+	int i, j;
+
+	sresult = *(double *) in;
+	printf("inside 2 --- input = %2.2f\n", sresult);
+	
+	
+	result = malloc(sizeof(double));
+	*result = sresult + 17;
+	
+	for (i=0; i<MAXY; i++)
+		for (j=0; j<MAXY; j++)
+			printf("i = %d, j = %d\n", i, j);
+	
+	printf("result fintal (2) == %2.2f\n", *result);
+	return (void *) result;
 }
 
 int main(int argc, char *argv[]) {
@@ -67,19 +82,18 @@ int main(int argc, char *argv[]) {
 		athread_attr_set_remote_ability(&remote_thread_attr, 1);
 		athread_attr_set_remote_service(&remote_thread_attr, REMOTE_SERVICE_ID);
 	
-		// athread_attr_init(&remote_thread_attr_2);
-		// athread_attr_set_remote_ability(&remote_thread_attr_2, 1);
-		// athread_attr_set_remote_service(&remote_thread_attr_2, REMOTE_SERVICE_ID_2);
+		athread_attr_init(&remote_thread_attr_2);
+		athread_attr_set_remote_ability(&remote_thread_attr_2, 1);
+		athread_attr_set_remote_service(&remote_thread_attr_2, REMOTE_SERVICE_ID_2);
 	
 		athread_create(&remote_thread, &remote_thread_attr, remote_th, (void *) input_value);
-
-		// athread_create(&remote_thread_2, &remote_thread_attr_2, remote_th_2, (void *) input_value);
+		athread_create(&remote_thread_2, &remote_thread_attr_2, remote_th_2, (void *) input_value);
 
 		athread_join(remote_thread, (void*) result);
-		// printf("Depois do join 1 = %2.2f\n", *result);
+		printf("Depois do join 1 = %2.2f\n", *result);
 		
-		// athread_join(remote_thread_2, (void*) result);
-		// printf("Depois do join 2 = %2.2f\n", *result);
+		athread_join(remote_thread_2, (void*) result);
+		printf("Depois do join 2 = %2.2f\n", *result);
 	}
 	
 	printf("[ALOHHA] - Alohha before terminate from rank == %d\n", athread_remote_rank);
