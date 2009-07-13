@@ -28,7 +28,7 @@ void *remote_th(void *in) {
 			printf("i = %d, j = %d\n", i, j);
 	
 	printf("result fintal == %2.2f\n", *result);
-	return (void *) *result;
+	return (void *) result;
 }
 
 void *remote_th_2(void *in) {
