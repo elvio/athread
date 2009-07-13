@@ -8,24 +8,36 @@
 // tags
 #define REMOTE_SERVICE_ID 1
 #define REMOTE_SERVICE_ID_2 2
+#define MAXY 3000
 
 
 void *remote_th(void *in) {
 	double *result = malloc(sizeof(double));
+	int i, j, f;
 	
 	printf("remote_th --- athread_remote_rank == %d\n", athread_remote_rank);
 	*result = *(double *) in;
 	*result += 10;
+	
+	for (i=0; i < MAXY; i++)
+		for (j=0; j < MAXY; j++)
+			for (f=0; f < MAXY; f++);
 	
 	return (void *) result;
 }
 
 void *remote_th_2(void *in) {
 	double *result = malloc(sizeof(double));
+	int i, j, f;
 	
 	printf("remote_th_2 --- athread_remote_rank == %d\n", athread_remote_rank);
 	*result = *(double *) in;
 	*result += 12;
+	
+	for (i=0; i < MAXY; i++)
+		for (j=0; j < MAXY; j++)
+			for (f=0; f < MAXY; f++);
+	
 	
 	return (void *) result;
 }
