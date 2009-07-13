@@ -212,6 +212,7 @@ void *athread_remote_slave_execute_job(void *in) {
 	athread_t thread;
 	athread_attr_t remote_attr;
 	int i;
+	pfunc function;
 	
 	/*
 		send ok to master
