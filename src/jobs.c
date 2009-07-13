@@ -393,6 +393,11 @@ int athread_join(athread_t id, void **return_data)
 			printf("[m] master --- got result from slave #%d --- result == %2.2f\n", (job->attribs.remote_job)->slave, *result);
 			mark_slave_as_fresh((job->attribs.remote_job)->slave);
 			job->status = JOB_JOINED;
+			if (return_data) {
+				*return_data = (void *) result;
+			} else {
+				printf("found return_data == NULL\n");
+			}
 			// *return_data = result;
 			return 0;
 		} else if (athread_remote_rank != 0) {
