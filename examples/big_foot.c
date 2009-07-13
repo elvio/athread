@@ -12,12 +12,15 @@
 
 
 void *remote_th(void *in) {
-	printf("inside 1\n");
+	double sresult;
 	double *result;
+
+	sresult = *(double *) in;
+	printf("inside 1 --- input = %2.2f\n", sresult);
+	
 	
 	result = malloc(sizeof(double));
-	*result = *(double *) in;
-	*result += 15;
+	*result = sresult + 15;
 	return (void *) result;
 }
 
