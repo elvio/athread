@@ -269,6 +269,7 @@ int athread_create(athread_t *id, athread_attr_t *attribs, pfunc function, void 
 		pthread_cond_init(&job->reply_cond, NULL);
 		pthread_cond_init(&job->steal_cond, NULL);
 		init_list_head(&job->child_list, 1);
+		printf("-- creating athread -- mutex are ok\n");
 
 		if (attribs->remote_job) {
 			printf("-- creating athread -- remote job\n");
