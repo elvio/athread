@@ -210,13 +210,17 @@ int athread_create(athread_t *id, athread_attr_t *attribs, pfunc function, void 
 	athread_t *vsplit;
 	int i, nt;
 
+	printf("-- creating athread\n");
+
 	if (athread_remote_rank != 0 && attribs && attribs->remote_job) {
 		// mark to engine ignore this task if slave try to execute
 		attribs->ignore = 1;
 		printf("preventing slave to create a remote job\n");
+		printf("-- creating athread -- returning\n");
 		return 0;
 	} 
 	
+	printf("-- creating athread -- checking attribs\n");
 	if ((!attribs) || (attribs->splitfactor <= 0)) nt = 0;
 	else nt = attribs->splitfactor - 1;
 
@@ -238,6 +242,7 @@ int athread_create(athread_t *id, athread_attr_t *attribs, pfunc function, void 
 			athread_attr_init_defaults(&job->attribs);
 		}
 		
+		printf("-- creating athread -- creating a job id\n");
 		job->id = new_job_id();
 		job->function = function;
 
@@ -254,6 +259,8 @@ int athread_create(athread_t *id, athread_attr_t *attribs, pfunc function, void 
 		if ((attribs) && (attribs->splitfactor > 0)) job->data = attribs->split(data, attribs->splitfactor, attribs->inputsize, i);
 		else job->data = data;
 
+
+		printf("-- creating athread -- init mutexes\n");
 		job->owner = -1;
 		pthread_mutex_init(&job->mutex, NULL);
 		pthread_mutex_init(&job->reply_mutex, NULL);
