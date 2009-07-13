@@ -208,7 +208,6 @@ void *athread_remote_slave_execute_job(void *in) {
 	int service_id;
 	double input_data;
 	double *input_data_p;
-	double *result_p;
 	double result;
 	struct remote_service *service;
 	athread_t thread;
@@ -264,20 +263,12 @@ void *athread_remote_slave_execute_job(void *in) {
 	printf("[s] slave #%d --- found registered service with ID = %d\n", athread_remote_rank, service->service_id);
 	
 	athread_create(&thread, (void *) NULL, *function, (void *) input_data_p);
-	result_p = athread_join_double(thread);
+	result = athread_join_double(thread);
+	printf("Got result ==> %2.2f\n", result);
 	
 	printf("[s] slave #%d --- finished computation and joined\n", athread_remote_rank);
-	
-	double test2 = *result_p;
-	printf("start sending result --- result_p = %2.2f...\n", test2);
-
-	result = *(double *) result_p;
-	
 	athread_remote_sent_result_to_master(result);
 	
-	// free(result_p);
-	// free(input_data_p);
-
 	printf("[s] slave #%d --- starting process again --- goto ---\n", athread_remote_rank);
 	goto init_slave;
 	
