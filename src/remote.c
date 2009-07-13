@@ -243,7 +243,7 @@ void *athread_remote_slave_execute_job(void *in) {
 	input_data_p = malloc(sizeof(double));
 	*input_data_p = input_data;
 	
-	result_p = malloc(sizeof(double));
+	//result_p = malloc(sizeof(double));
 
 	function = NULL;
 	printf("[s] slave #%d --- registered_serivices_index == %d\n", athread_remote_rank, registered_services_index);
@@ -267,7 +267,8 @@ void *athread_remote_slave_execute_job(void *in) {
 	printf("after create --- \n");
 	athread_join(thread, (void *) result_p);
 	printf("[s] slave #%d --- finished computation and joined\n", athread_remote_rank);
-	printf("start sending result --- result_p = %2.2f...\n", *result_p);
+	double test2 = *(double *) result_p;
+	printf("start sending result --- result_p = %2.2f...\n", test2);
 
 	result = *(double *) result_p;
 	
