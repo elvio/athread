@@ -412,7 +412,7 @@ int athread_join(athread_t id, void **return_data)
 			}
 			// *return_data = result;
 			return 0;
-		} else if (athread_remote_rank != 0) {
+		} else if (athread_remote_rank != 0 && (job->attribs.ignore) {
 			printf("[s] slave --- ** ignoring join **\n");
 			return 0;
 		}
