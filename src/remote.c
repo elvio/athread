@@ -262,9 +262,8 @@ void *athread_remote_slave_execute_job(void *in) {
 	}
 	
 	printf("[s] slave #%d --- found registered service with ID = %d\n", athread_remote_rank, service->service_id);
-	//athread_create(&thread, (void *) NULL, &function, (void *) input_data_p);
 	printf("before create --- \n");
-	athread_create(&thread, (void *) NULL, some_service, (void *) NULL);
+	athread_create(&thread, (void *) NULL, &function, (void *) input_data_p);
 	printf("after create --- \n");
 	athread_join(thread, (void *) result_p);
 	printf("[s] slave #%d --- finished computation and joined\n", athread_remote_rank);
