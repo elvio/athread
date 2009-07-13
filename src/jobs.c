@@ -537,21 +537,7 @@ double athread_join_double(athread_t id)
 		}
 		
 		// Wow.. what about join a remote job Beavis?
-		if (athread_remote_rank == 0 && job->attribs.remote_job) {
-			result = malloc(sizeof(double));
-			printf("[m] master --- got a join call. Time to request some data hun?\n");
-			*result = request_result_from_slave((job->attribs.remote_job)->slave);
-			printf("[m] master --- got result from slave #%d --- result == %2.2f\n", (job->attribs.remote_job)->slave, *result);
-			mark_slave_as_fresh((job->attribs.remote_job)->slave);
-			job->status = JOB_JOINED;
-			if (return_data) {
-				//*return_data = (void *) result;
-			} else {
-				printf("found return_data == NULL\n");
-			}
-			// *return_data = result;
-			return 0;
-		} else if (athread_remote_rank != 0 && job->attribs.ignore) {
+		if (athread_remote_rank != 0 && job->attribs.ignore) {
 			printf("[s] slave --- ** ignoring join **\n");
 			return 0;
 		}
@@ -591,10 +577,11 @@ double athread_join_double(athread_t id)
 			remove_from_list(job);
 		}
 		
-		double test = *(double *) job->retval;
-    printf("Retornando job->retval === %2.2f\n", test);
+		double double_value = *(double *) job->retval;
+    printf("Retornando job->retval === %2.2f\n", double_value);
 		pthread_mutex_unlock(mutex);
-    return job->retval;
+		
+    return double_value;
 		count++;
 	} while (count < nt);
 
