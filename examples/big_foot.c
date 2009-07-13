@@ -8,7 +8,7 @@
 // tags
 #define REMOTE_SERVICE_ID 1
 #define REMOTE_SERVICE_ID_2 2
-#define MAXY 3000
+#define MAXY 10
 
 
 void *remote_th(void *in) {
