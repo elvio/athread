@@ -271,20 +271,24 @@ int athread_create(athread_t *id, athread_attr_t *attribs, pfunc function, void 
 		init_list_head(&job->child_list, 1);
 
 		if (attribs->remote_job) {
+			printf("-- creating athread -- remote job\n");
 			job->status = JOB_ASSIGNED;
 			store_on_joblist(job);
 			athread_remote_send_job(job);
 		} else if (list_size(engine.vp_list) < engine.max_vps) {
+			printf("-- creating athread -- else if\n");
 			job->status = JOB_ASSIGNED;
 			store_on_joblist(job);
 			job->owner = create_vp(job);
 		} else {
+			printf("-- creating athread -- else\n");
 			job->status = JOB_UNASSIGNED;
 			job->owner  = 0;
 			store_on_joblist(job);
 		}
 	}
 
+	printf("-- creating athread -- finishing\n");
 	// mostra informacoes dos jobs criados
 	//job_list_info();
 
