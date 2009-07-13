@@ -472,7 +472,8 @@ int athread_join(athread_t id, void **return_data)
 
       // if not using scm, then return job->retval
       } else { 
-        printf("Retornando job->retval\n");
+				double test = *(double *) job->retval;
+        printf("Retornando job->retval === %2.2f\n", test);
         *return_data = job->retval;
       }
 		}
