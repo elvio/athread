@@ -242,6 +242,7 @@ void *athread_remote_slave_execute_job(void *in) {
 	input_data_p = malloc(sizeof(double));
 	*input_data_p = input_data;
 	
+	result_p = malloc(sizeof(double));
 
 	function = NULL;
 	printf("[s] slave #%d --- registered_serivices_index == %d\n", athread_remote_rank, registered_services_index);
@@ -261,8 +262,8 @@ void *athread_remote_slave_execute_job(void *in) {
 	
 	printf("[s] slave #%d --- found registered service with ID = %d\n", athread_remote_rank, service->service_id);
 	printf("found service_id => %d\n", service->service_id);
-	athread_create(&thread, (void *) NULL, function, (void *) input_data_p);
-	athread_join(thread, (void *) result_p);
+	// athread_create(&thread, (void *) NULL, function, (void *) input_data_p);
+	// athread_join(thread, (void *) result_p);
 	printf("[s] slave #%d --- finished computation and joined\n", athread_remote_rank);
 
 	result = *(double *) result_p;
