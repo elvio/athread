@@ -5,7 +5,7 @@
 #include "time_log.h"
 #include "athread.h"
 
-#define INPUT 999999
+#define INPUT 99999999
 
 void *calculate(void *in) {
 	double *div_times;
