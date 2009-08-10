@@ -27,7 +27,7 @@ extern "C" {
 
 #include "anahy/structures.h"
 
-#define ATHREAD_SUPPORT_DISTRIBUTED FALSE
+#define ATHREAD_SUPPORT_DISTRIBUTED 0
 
 /* engine control */
 int aInit(int *argc, char ***argv);
