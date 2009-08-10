@@ -27,6 +27,8 @@ extern "C" {
 
 #include "anahy/structures.h"
 
+#define ATHREAD_SUPPORT_DISTRIBUTED FALSE
+
 /* engine control */
 int aInit(int *argc, char ***argv);
 int aRemoteInit(int argc, char **argv);

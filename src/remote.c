@@ -399,9 +399,12 @@ int aRemoteInit(int argc, char **argv) {
 	int i;
 	pthread_t *slave_oks;
 	
-	#ifdef DEBUG
+	if (!ATHREAD_SUPPORT_DISTRIBUTED) {
+		printf("This version not support distributed threads\n");
+		return 0;
+	} else {
 		printf("MPI configuration is done. I guess it was the hard part ;)\n");
-	#endif
+	}
 
 	if (remote_master()) {
 		printf("Starting slave status...\n");
