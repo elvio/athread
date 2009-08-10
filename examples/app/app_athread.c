@@ -26,6 +26,7 @@ void *calculate(void *in) {
 
 void split(double weight) {
 	int j;
+	double *result;
 	athread_t *threads;
 	
 	threads = malloc(sizeof(athread_t) * (int) weight);
@@ -34,8 +35,10 @@ void split(double weight) {
 		athread_create(&threads[j], NULL, calculate, (void *) NULL);
 	}
 	
+	result = malloc(sizeof(double));
 	for (j=0; j < weight; j++) {
-		athread_join(threads[j], (void *) NULL);
+		printf("-- join #%d\n", j);
+		athread_join(threads[j], (void *) result);
 	}
 }
 
