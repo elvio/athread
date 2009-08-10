@@ -50,6 +50,8 @@ int main(int argc, char *argv[]) {
 
 	weight = atof(argv[1]);
 	aInit(&argc, &argv);
+	aRemoteInit(argc, argv);
+	
 	set_file_log_path("logs/athread_version.log");
 	sprintf(tag_log, "input:%d, weight:%2.0f", INPUT, weight);
 	time_log_init(tag_log);
