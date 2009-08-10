@@ -3,10 +3,11 @@
 #include <math.h>
 #include <string.h>
 #include "time_log.h"
+#include "athread.h"
 
 #define INPUT 99999999
 
-void *calculate(void *input) {
+void *calculate(void *in) {
 	int div_times = 0;
 	int i;
 	double sqrt_result;
@@ -24,8 +25,7 @@ void *calculate(void *input) {
 
 
 void split(double weight) {
-	int div_times = 0;
-	int i, j;
+	int j;
 	athread_t *threads;
 	
 	threads = malloc(sizeof(athread_t) * (int) weight);
@@ -41,17 +41,17 @@ void split(double weight) {
 
 
 int main(int argc, char *argv[]) {
-	int result;
 	double weight;
 	char tag_log[100];
 
 	weight = atof(argv[1]);
-	
+	aInit();
 	set_file_log_path("logs/athread_version.log");
 	sprintf(tag_log, "input:%d, weight:%2.0f", INPUT, weight);
 	time_log_init(tag_log);
 	split(weight);
 	time_log_stop();
 	compute_time_and_flush();
+	aTerminate();
 	return 0;
 }
