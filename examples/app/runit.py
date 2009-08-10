@@ -5,8 +5,9 @@
 # work. 
 
 import os
+import sys
 
-files_to_run = ['app_serial', 'app_athread']
+files_to_run = ['app_serial', 'app_athread', 'app_tcc']
 weights = [1, 2, 3, 4, 5, 6, 7]
 
 for file_path in files_to_run:
