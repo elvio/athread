@@ -8,15 +8,17 @@
 #define INPUT 999999
 
 void *calculate(void *in) {
-	int div_times = 0;
+	double *div_times;
 	int i;
 	double sqrt_result;
 	double input = INPUT;
 	
+	div_times = malloc(sizeof(double));
+	
 	for (i=input; i > 0; i--) {
 		sqrt_result = tan(sin(acos(sqrt(input * i))));
 		if (fmod(input, i) == 0) {
-			div_times++;
+			*div_times = *div_times + 1;
 		}
 	}
 	
