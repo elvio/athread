@@ -43,6 +43,10 @@ void split(double weight) {
 int main(int argc, char *argv[]) {
 	double weight;
 	char tag_log[100];
+	
+	MPI_Init(&argc, &argv);
+	MPI_Comm_rank(MPI_COMM_WORLD, &athread_remote_rank);  
+  MPI_Comm_size(MPI_COMM_WORLD, &athread_remote_size);
 
 	weight = atof(argv[1]);
 	aInit(&argc, &argv);
@@ -52,6 +56,8 @@ int main(int argc, char *argv[]) {
 	split(weight);
 	time_log_stop();
 	compute_time_and_flush();
+	
+	aRemoteTerminate();
 	aTerminate();
 	return 0;
 }
